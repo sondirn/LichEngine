@@ -53,8 +53,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HelperObjects\XmlHelper.cs" />
     <Compile Include="Maps\TiledMap.cs" />
     <Compile Include="Maps\TiledMapLayer.cs" />
+    <Compile Include="Maps\TiledMapLayerData.cs" />
+    <Compile Include="Maps\TiledMapTile.cs" />
     <Compile Include="Maps\TiledMapTileSet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TiledMapPipeline\TiledMapLayerContent.cs" />
@@ -64,8 +67,18 @@
     <Compile Include="TiledMapPipeline\TiledMapProcessor.cs" />
     <Compile Include="TiledMapPipeline\TiledMapProcessorResult.cs" />
     <Compile Include="TiledMapPipeline\TiledMapReader.cs" />
+    <Compile Include="TiledMapPipeline\TiledMapTileContent.cs" />
     <Compile Include="TiledMapPipeline\TiledMapTileSetContent.cs" />
     <Compile Include="TiledMapPipeline\TiledMapWriter.cs" />
+    <Compile Include="TiledTileSetPipeline\TiledTileSetAnimationFrameContent.cs" />
+    <Compile Include="TiledTileSetPipeline\TiledTileSetImageContent.cs" />
+    <Compile Include="TiledTileSetPipeline\TiledTileSetContent.cs" />
+    <Compile Include="TiledTileSetPipeline\TiledTileSetImporter.cs" />
+    <Compile Include="TiledTileSetPipeline\TiledTileSetProcessor.cs" />
+    <Compile Include="TiledTileSetPipeline\TiledTileSetProcessorResult.cs" />
+    <Compile Include="TiledTileSetPipeline\TiledTileSetTileAnimationContent.cs" />
+    <Compile Include="TiledTileSetPipeline\TiledTileSetTileContent.cs" />
+    <Compile Include="TiledTileSetPipeline\TiledTileSetWriter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

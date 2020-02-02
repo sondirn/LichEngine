@@ -1,13 +1,14 @@
 ﻿using Newtonsoft.Json;
+using System.Xml.Serialization;
 
 namespace LichEngine.ContentExtensions.Maps
 {
+    [XmlRoot(ElementName = "tileset")]
     public class TiledMapTileSet
     {
-        [JsonProperty("firstgid")]
-        public long Firstgid { get; set; }
-
-        [JsonProperty("source")]
+        [XmlAttribute(AttributeName = "firstgid")]
+        public int Firstgid { get; set; }
+        [XmlAttribute(AttributeName = "source")]
         public string Source { get; set; }
     }
 }

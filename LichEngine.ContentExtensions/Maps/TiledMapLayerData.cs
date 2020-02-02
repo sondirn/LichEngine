@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace LichEngine.ContentExtensions.TiledMapPipeline
+namespace LichEngine.ContentExtensions.Maps
 {
     [XmlRoot(ElementName = "data")]
-    public class TiledMapLayerDataContent
+    public class TiledMapLayerData
     {
         [XmlElement(ElementName = "tile")]
-        public List<TiledMapTileContent> Tile { get; set; }
+        public List<TiledMapTile> Tile { get; set; }
     }
 }

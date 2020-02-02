@@ -1,25 +1,21 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace LichEngine.ContentExtensions.Maps
 {
-    public class TiledMapLayer
+	[XmlRoot(ElementName = "layer")]
+	public class TiledMapLayer
     {
-        [JsonProperty("data")]
-        public long[] Data { get; set; }
-
-        [JsonProperty("height")]
-        public long Height { get; set; }
-
-        [JsonProperty("name")]
-        public string Name { get; set; }
-
-        [JsonProperty("opacity")]
-        public long Opacity { get; set; }
-
-        [JsonProperty("visible")]
-        public bool Visible { get; set; }
-
-        [JsonProperty("width")]
-        public long Width { get; set; }
-    }
+		[XmlElement(ElementName = "data")]
+		public TiledMapLayerData Data { get; set; }
+		[XmlAttribute(AttributeName = "id")]
+		public int Id { get; set; }
+		[XmlAttribute(AttributeName = "name")]
+		public string Name { get; set; }
+		[XmlAttribute(AttributeName = "width")]
+		public int Width { get; set; }
+		[XmlAttribute(AttributeName = "height")]
+		public int Height { get; set; }
+	}
 }

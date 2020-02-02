@@ -6,22 +6,22 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace LichEngine.ContentExtensions.TiledMapPipeline
 {
-    [ContentImporter(".json", DefaultProcessor = "TiledMapProcessor",
+    [ContentImporter(".tmx", DefaultProcessor = "TiledMapProcessor",
             DisplayName = "Tiled Map Importer")]
-    class TiledMapImporter : ContentImporter<TiledMapContent>
+    public class TiledMapImporter : ContentImporter<TiledMapContent>
     {
         public override TiledMapContent Import(string filename, ContentImporterContext context)
         {
-            context.Logger.LogMessage("Importing JSON map: {0}", filename);
-            using (var file = File.OpenText(filename))
+            context.Logger.LogMessage("Importing TMX Map: {0}", filename);
+            XmlSerializer serializer = new XmlSerializer(typeof(TiledMapContent));
+            using(FileStream stream = new FileStream(filename, FileMode.Open))
             {
-                var serializer = new JsonSerializer();
-                var serializedMap = (TiledMapContent)serializer.Deserialize(file, typeof(TiledMapContent));
-
-                return serializedMap;
+                TiledMapContent result = (TiledMapContent)serializer.Deserialize(stream);
+                return result;
             }
         }
     }

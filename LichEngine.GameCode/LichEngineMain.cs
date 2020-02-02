@@ -46,7 +46,7 @@ namespace LichEngine.GameCode
             string path2 = Directory.GetParent(path).FullName;
             var test = Path.Combine(path, @"..\/TileSets\/OutDoorTileSet.json");
             Console.WriteLine(test);
-            //tiledMap = Content.Load<TiledMap>(@"...\/TiledMaps\/Maps\/MapTest");
+            tiledMap = Content.Load<TiledMap>(@"TiledMaps\MapTest");
             
             base.Initialize();
         }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Content.Pipeline;
+using System.IO;
 
 namespace LichEngine.ContentExtensions.TiledMapPipeline
 {
@@ -7,6 +8,10 @@ namespace LichEngine.ContentExtensions.TiledMapPipeline
     {
         public override TiledMapProcessorResult Process(TiledMapContent map, ContentProcessorContext context)
         {
+            foreach (var item in map.Tileset)
+            {
+                item.Source = Path.GetFileNameWithoutExtension(item.Source);
+            }
             return new TiledMapProcessorResult(map, context.Logger);
         }
     }

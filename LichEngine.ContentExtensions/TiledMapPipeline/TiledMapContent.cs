@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,13 +16,13 @@ namespace LichEngine.ContentExtensions.TiledMapPipeline
 		public List<TiledMapLayerContent> Layer { get; set; }
 
 		[XmlAttribute(AttributeName = "width")]
-		public string Width { get; set; }
+		public int Width { get; set; }
 		[XmlAttribute(AttributeName = "height")]
-		public string Height { get; set; }
+		public int Height { get; set; }
 		[XmlAttribute(AttributeName = "tilewidth")]
-		public string Tilewidth { get; set; }
+		public int Tilewidth { get; set; }
 		[XmlAttribute(AttributeName = "tileheight")]
-		public string Tileheight { get; set; }
+		public int Tileheight { get; set; }
 
 	}
 }

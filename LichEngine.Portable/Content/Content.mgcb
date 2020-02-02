@@ -33,12 +33,12 @@
 /processorParam:TextureFormat=Color
 /build:Textures/DefaultTexture.png
 
-#begin TiledMaps/Maps/MapTest.json
+#begin TiledMaps/MapTest.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
-/build:TiledMaps/Maps/MapTest.json
+/build:TiledMaps/MapTest.tmx
 
-#begin TiledMaps/TileSets/OutDoor.png
+#begin TiledMaps/OutDoor.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -48,5 +48,10 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:TiledMaps/TileSets/OutDoor.png
+/build:TiledMaps/OutDoor.png
+
+#begin TiledMaps/OutDoor.tsx
+/importer:TiledTileSetImporter
+/processor:TiledTileSetProcessor
+/build:TiledMaps/OutDoor.tsx
 
