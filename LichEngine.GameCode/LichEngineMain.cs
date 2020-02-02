@@ -42,12 +42,13 @@ namespace LichEngine.GameCode
             graphics.PreferredBackBufferWidth = 1280;
             graphics.PreferredBackBufferHeight = 720;
             graphics.ApplyChanges();
-            var path = Environment.CurrentDirectory + @"Content\TiledMaps\Maps\MapTest.json";
-            string path2 = Directory.GetParent(path).FullName;
-            var test = Path.Combine(path, @"..\/TileSets\/OutDoorTileSet.json");
-            Console.WriteLine(test);
-            tiledMap = Content.Load<TiledMap>(@"TiledMaps\MapTest");
+            string path = @"TiledMaps\MapTest";
+            string parent = Directory.GetParent(path).Name;
             
+            tiledMap = Content.Load<TiledMap>( parent + @"\" + @"MapTest");
+            string tileSetPath = tiledMap.Tileset[0].Source;
+            Console.WriteLine(tileSetPath);
+
             base.Initialize();
         }
 
@@ -86,20 +87,22 @@ namespace LichEngine.GameCode
 
         protected override void Draw(GameTime gameTime)
         {
-            //GraphicsDevice.Clear(Color.TransparentBlack);
-
-            // TODO: Add your drawing code here
-            
-
-            //spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, customEffect, camera.GetViewMatrix());
-            
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive ,SamplerState.PointClamp);
+            GraphicsDevice.Clear(Color.TransparentBlack);
+#if WINDOWS
+            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend ,SamplerState.PointClamp);
+            spriteBatch.DrawString(font, "DIRECTX", new Vector2(100, 100), Color.Green, 0f, Vector2.Zero, .3f, SpriteEffects.None, 0f);
+            var Texture = AssetManager.GetAsset<Texture2D>("DefaultTexture");
+            spriteBatch.Draw(Texture, new Vector2(300, 300), Color.White);
+            spriteBatch.End();
+#endif
+#if LINUX
+            spriteBatch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend ,SamplerState.PointClamp);
             spriteBatch.DrawString(font, "OPENGL", new Vector2(100, 100), Color.Orange, 0f, Vector2.Zero, .3f, SpriteEffects.None, 0f);
             var Texture = AssetManager.GetAsset<Texture2D>("DefaultTexture");
             spriteBatch.Draw(Texture, new Vector2(300, 300), Color.White);
-
-
             spriteBatch.End();
+#endif
+
             base.Draw(gameTime);
         }
     }

@@ -8,7 +8,7 @@ namespace LichEngine.ContentExtensions.TiledMapPipeline
     {
         public override TiledMapProcessorResult Process(TiledMapContent map, ContentProcessorContext context)
         {
-            foreach (var item in map.Tileset)
+            foreach (var item in map.TileSets)
             {
                 item.Source = Path.GetFileNameWithoutExtension(item.Source);
             }

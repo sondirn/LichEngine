@@ -38,6 +38,11 @@
 /processor:TiledMapProcessor
 /build:TiledMaps/MapTest.tmx
 
+#begin TiledMaps/MapTest.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:TiledMaps/MapTest.tmx
+
 #begin TiledMaps/OutDoor.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -50,8 +55,20 @@
 /processorParam:TextureFormat=Color
 /build:TiledMaps/OutDoor.png
 
-#begin TiledMaps/OutDoor.tsx
+#begin TiledMaps/OutDoor.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:TiledMaps/OutDoor.png
+
+#begin TiledMaps/OutDoorTileSet.tsx
 /importer:TiledTileSetImporter
 /processor:TiledTileSetProcessor
-/build:TiledMaps/OutDoor.tsx
+/build:TiledMaps/OutDoorTileSet.tsx
 

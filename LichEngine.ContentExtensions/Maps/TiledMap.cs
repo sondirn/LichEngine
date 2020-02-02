@@ -25,5 +25,9 @@ namespace LichEngine.ContentExtensions.Maps
 		[XmlAttribute(AttributeName = "tileheight")]
 		public int Tileheight { get; set; }
 
+		public string Name { get; set; }
+
+		
+
 	}
 }

@@ -11,9 +11,9 @@ namespace LichEngine.ContentExtensions.TiledMapPipeline
 	public class TiledMapContent
 	{
 		[XmlElement(ElementName = "tileset")]
-		public List<TiledMapTileSetContent> Tileset { get; set; }
+		public List<TiledMapTileSetContent> TileSets { get; set; }
 		[XmlElement(ElementName = "layer")]
-		public List<TiledMapLayerContent> Layer { get; set; }
+		public List<TiledMapLayerContent> Layers { get; set; }
 
 		[XmlAttribute(AttributeName = "width")]
 		public int Width { get; set; }

@@ -7,6 +7,6 @@ namespace LichEngine.ContentExtensions.TiledMapPipeline
     public class TiledMapLayerDataContent
     {
         [XmlElement(ElementName = "tile")]
-        public List<TiledMapTileContent> Tile { get; set; }
+        public List<TiledMapTileContent> Tiles { get; set; }
     }
 }
