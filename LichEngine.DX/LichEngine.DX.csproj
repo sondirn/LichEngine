@@ -46,15 +46,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Comora, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Comora.0.5.0\lib\portable-net45+win8+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Comora.dll</HintPath>
-    </Reference>
-    <Reference Include="MonoGame.Extended, Version=3.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MonoGame.Extended.3.7.0\lib\netstandard2.0\MonoGame.Extended.dll</HintPath>
-    </Reference>
-    <Reference Include="MonoGame.Extended.Graphics, Version=3.7.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MonoGame.Extended.Graphics.3.7.0\lib\netstandard2.0\MonoGame.Extended.Graphics.dll</HintPath>
-    </Reference>
     <Reference Include="MonoGame.Framework">
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Windows\MonoGame.Framework.dll</HintPath>
     </Reference>
@@ -77,10 +68,6 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\LichEngine.ContentExtensions\LichEngine.ContentExtensions.csproj">
-      <Project>{e0aedb9a-6984-4e8e-89db-23643890410f}</Project>
-      <Name>LichEngine.ContentExtensions</Name>
-    </ProjectReference>
     <ProjectReference Include="..\LichEngine.Portable\LichEngine.Portable.csproj">
       <Project>{a25b5ff0-4aba-4b5c-bea5-5e5db9637cf6}</Project>
       <Name>LichEngine.Portable</Name>

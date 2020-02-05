@@ -59,6 +59,10 @@
     <Compile Include="Maps\TiledMapLayerData.cs" />
     <Compile Include="Maps\TiledMapTile.cs" />
     <Compile Include="Maps\TiledMapTileSet.cs" />
+    <Compile Include="Maps\TiledTileSetAnimationFrame.cs" />
+    <Compile Include="Maps\TiledTileSetImage.cs" />
+    <Compile Include="Maps\TiledTileSetTile.cs" />
+    <Compile Include="Maps\TiledTileSetTileAnimation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TiledMapPipeline\TiledMapLayerContent.cs" />
     <Compile Include="TiledMapPipeline\TiledMapContent.cs" />

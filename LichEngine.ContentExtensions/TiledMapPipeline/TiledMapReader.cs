@@ -1,5 +1,6 @@
 ﻿using LichEngine.ContentExtensions.HelperObjects;
 using LichEngine.ContentExtensions.Maps;
+using LichEngine.ContentExtensions.TiledTileSetPipeline;
 using Microsoft.Xna.Framework.Content;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Bson;
@@ -50,13 +51,55 @@ namespace LichEngine.ContentExtensions.TiledMapPipeline
             for (int i = 0; i < tileSetCount; i++)
             {
                 var firstGid = reader.ReadInt32();
-                var source = reader.ReadString();
-                
-                map.Tileset.Add(new TiledMapTileSet
+                var name = reader.ReadString();
+                var tilewidth = reader.ReadInt32();
+                var tileheight = reader.ReadInt32();
+                var tilecount = reader.ReadInt32();
+                var colums = reader.ReadInt32();
+                var tileset = new TiledMapTileSet
                 {
                     Firstgid = firstGid,
-                    Source = source
-                });
+                    Name = name,
+                    Tilewidth = tilewidth,
+                    Tileheight = tileheight,
+                    Tilecount = tilecount,
+                    Columns = colums
+                };
+                var imageSource = reader.ReadString();
+                var imageWidth = reader.ReadInt32();
+                var imageHeight = reader.ReadInt32();
+                tileset.Image = new TiledTileSetImage
+                {
+                    Source = imageSource,
+                    Height = imageHeight,
+                    Width = imageWidth
+                };
+                var tilesCount = reader.ReadInt32();
+                tileset.Tiles = new List<TiledTileSetTile>();
+
+                for (int x = 0; x < tilesCount; x++)
+                {
+                    
+                    var tilesetTile_id = reader.ReadInt32();
+                    var tilesetTile = new TiledTileSetTile { Id = tilesetTile_id };
+                    var frameCount = reader.ReadInt32();
+                    tilesetTile.Animation = new TiledTileSetTileAnimation();
+                    tilesetTile.Animation.Frame = new List<TiledTileSetAnimationFrame>();
+                    for (int y = 0; y < frameCount; y++)
+                    {
+                        var frameTileId = reader.ReadInt32();
+                        var frameduration = reader.ReadDouble();
+                        var frame = new TiledTileSetAnimationFrame
+                        {
+                            Tileid = frameTileId,
+                            Duration = frameduration,
+                        };
+                        tilesetTile.Animation.Frame.Add(frame);
+                    }
+                    tileset.Tiles.Add(tilesetTile);
+                }
+                map.Tileset.Add(tileset);
+
             }
         }
 

@@ -10,7 +10,7 @@ namespace LichEngine.ContentExtensions.TiledMapPipeline
         {
             foreach (var item in map.TileSets)
             {
-                item.Source = Path.GetFileNameWithoutExtension(item.Source);
+                //item.Source = Path.GetFileNameWithoutExtension(item.Source);
             }
             return new TiledMapProcessorResult(map, context.Logger);
         }

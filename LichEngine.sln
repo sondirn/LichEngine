@@ -7,15 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LichEngine.Portable", "Lich
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LichEngine.GL", "LichEngine.GL\LichEngine.GL.csproj", "{F73F081E-99BD-4F71-95C2-7A8F8EBE42C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LichEngine.DX", "LichEngine.DX\LichEngine.DX.csproj", "{137EA23B-F902-489E-A4AC-FD34063F5142}"
-EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "LichEngine.GameCode", "LichEngine.GameCode\LichEngine.GameCode.shproj", "{329A533F-DFA6-44C8-832A-2CF741F1D342}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LichEngine.ContentExtensions", "LichEngine.ContentExtensions\LichEngine.ContentExtensions.csproj", "{E0AEDB9A-6984-4E8E-89DB-23643890410F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nez", "..\Nez\Nez.Portable\Nez.csproj", "{B8AA2BD5-1D9F-4E22-9DF9-0619837009D4}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		LichEngine.GameCode\LichEngine.GameCode.projitems*{137ea23b-f902-489e-a4ac-fd34063f5142}*SharedItemsImports = 4
 		LichEngine.GameCode\LichEngine.GameCode.projitems*{329a533f-dfa6-44c8-832a-2cf741f1d342}*SharedItemsImports = 13
 		LichEngine.GameCode\LichEngine.GameCode.projitems*{f73f081e-99bd-4f71-95c2-7a8f8ebe42c0}*SharedItemsImports = 4
 	EndGlobalSection
@@ -42,20 +39,14 @@ Global
 		{F73F081E-99BD-4F71-95C2-7A8F8EBE42C0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F73F081E-99BD-4F71-95C2-7A8F8EBE42C0}.Release|x86.ActiveCfg = Release|Any CPU
 		{F73F081E-99BD-4F71-95C2-7A8F8EBE42C0}.Release|x86.Build.0 = Release|Any CPU
-		{137EA23B-F902-489E-A4AC-FD34063F5142}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{137EA23B-F902-489E-A4AC-FD34063F5142}.Debug|x86.ActiveCfg = Debug|x86
-		{137EA23B-F902-489E-A4AC-FD34063F5142}.Debug|x86.Build.0 = Debug|x86
-		{137EA23B-F902-489E-A4AC-FD34063F5142}.Release|Any CPU.ActiveCfg = Release|x86
-		{137EA23B-F902-489E-A4AC-FD34063F5142}.Release|x86.ActiveCfg = Release|x86
-		{137EA23B-F902-489E-A4AC-FD34063F5142}.Release|x86.Build.0 = Release|x86
-		{E0AEDB9A-6984-4E8E-89DB-23643890410F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E0AEDB9A-6984-4E8E-89DB-23643890410F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E0AEDB9A-6984-4E8E-89DB-23643890410F}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{E0AEDB9A-6984-4E8E-89DB-23643890410F}.Debug|x86.Build.0 = Debug|Any CPU
-		{E0AEDB9A-6984-4E8E-89DB-23643890410F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E0AEDB9A-6984-4E8E-89DB-23643890410F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E0AEDB9A-6984-4E8E-89DB-23643890410F}.Release|x86.ActiveCfg = Release|Any CPU
-		{E0AEDB9A-6984-4E8E-89DB-23643890410F}.Release|x86.Build.0 = Release|Any CPU
+		{B8AA2BD5-1D9F-4E22-9DF9-0619837009D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8AA2BD5-1D9F-4E22-9DF9-0619837009D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8AA2BD5-1D9F-4E22-9DF9-0619837009D4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B8AA2BD5-1D9F-4E22-9DF9-0619837009D4}.Debug|x86.Build.0 = Debug|Any CPU
+		{B8AA2BD5-1D9F-4E22-9DF9-0619837009D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8AA2BD5-1D9F-4E22-9DF9-0619837009D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8AA2BD5-1D9F-4E22-9DF9-0619837009D4}.Release|x86.ActiveCfg = Release|Any CPU
+		{B8AA2BD5-1D9F-4E22-9DF9-0619837009D4}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
