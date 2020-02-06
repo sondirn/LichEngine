@@ -1,5 +1,6 @@
 ﻿using LichEngine.GameCode.Components;
 using LichEngine.Portable.States;
+using LichEngine.Portable.States.PlayerStates;
 using Microsoft.Xna.Framework;
 using Nez;
 using System;
@@ -13,17 +14,34 @@ namespace LichEngine.States
     public class PlayerStateFree : KindredState
     {
         private Player _player;
-        private bool Sheathed = false;
+        public bool Sheathed = false;
+        private float _sheathedTimer;
+        private float _attackComboResetTimer;
         public PlayerStateFree(Player player)
         {
             _player = player;
+            Sheathed = true;
+            _sheathedTimer = 0.0f;
+            _attackComboResetTimer = 0.0f;
+        }
+
+        public override void StateEnter()
+        {
+            _attackComboResetTimer = 0.0f;
+            base.StateEnter();
         }
 
         public override void Update()
         {
-            if (_player.AttackInput.IsDown)
+            _attackComboResetTimer += Time.DeltaTime;
+            if (_attackComboResetTimer > .3f)
             {
-                _player._stateMachine.SetState(STATES.PLAYER_ATTACK);
+                var attackState = _player.StateMachine.States[STATES.PLAYER_ATTACK] as PlayerStateAttack;
+                attackState.attackNum = 0;
+            }
+            if (_player.AttackInput.IsPressed)
+            {
+                _player.StateMachine.SetState(STATES.PLAYER_ATTACK);
                 return;
             }
             //Calculate movement 
@@ -32,8 +50,10 @@ namespace LichEngine.States
             //handle movement
             if (moveDir != Vector2.Zero)
             {
+                //reset sheathe timer
+                _sheathedTimer = 0.0f;
                 //animation
-                _player.Animator.Speed = 1;
+                //_player.Animator.Speed = 1;
                 animation = "Run" + GetSheathe();
                 if (!_player.Animator.IsAnimationActive(animation))
                     _player.Animator.Play(animation);
@@ -46,15 +66,25 @@ namespace LichEngine.States
                     _player.Animator.FlipX = true;
                 //move character
                 moveDir = Vector2.Normalize(moveDir);
-                var movement = moveDir * _player.MoveSpeed * Time.DeltaTime;
+                var movement = moveDir * _player.MoveSpeed * _player.MoveSpeedModifier * Time.DeltaTime;
                 _player.Mover.CalculateMovement(ref movement, out var res);
                 _player._subpixelV2.Update(ref movement);
                 _player.Mover.ApplyMovement(movement);
             }
             else
             {
+                //start sheathing timer
+                if (!Sheathed)
+                {
+                    _sheathedTimer += Time.DeltaTime;
+                }
+                if (_sheathedTimer > 3f)
+                {
+                    //sheathe weapon
+                    SetSheathe();
+                }
                 animation = "Idle" + GetSheathe();
-                _player.Animator.Speed = 1;
+                //_player.Animator.Speed = 1;
                 if (!_player.Animator.IsAnimationActive(animation))
                     _player.Animator.Play(animation);
                 else
@@ -63,6 +93,18 @@ namespace LichEngine.States
             }
             
             base.Update();
+        }
+
+        public void SetSheathe()
+        {
+            Sheathed = true;
+            _sheathedTimer = 0.0f;
+        }
+
+        public void SetUnSheathe()
+        {
+            this.Sheathed = false;
+            _sheathedTimer = 0.0f;
         }
 
         private string GetSheathe()

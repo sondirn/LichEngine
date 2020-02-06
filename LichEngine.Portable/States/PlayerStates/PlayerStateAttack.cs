@@ -1,4 +1,6 @@
 ﻿using LichEngine.GameCode.Components;
+using LichEngine.States;
+using Nez;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,31 +19,34 @@ namespace LichEngine.Portable.States.PlayerStates
         public PlayerStateAttack(Player player)
         {
             _player = player;
-            _stateMachine = player._stateMachine;
+            _stateMachine = player.StateMachine;
             player.Animator.OnAnimationCompletedEvent += Animator_OnAnimationCompletedEvent;
             attackNum = 0;
         }
 
         private void Animator_OnAnimationCompletedEvent(string obj)
         {
-            if (_player.AttackInput.IsDown)
-            {
-                _stateMachine.SetState(STATES.PLAYER_ATTACK);
-            }
-            else
-            {
-                _stateMachine.SetState(STATES.PLAYER_FREE);
+            attackNum++;
 
-            }
+            _stateMachine.SetState(STATES.PLAYER_FREE);
+            
         }
 
         public override void StateEnter()
         {
-            
-            if(attackNum > 2)
+            if (_player.Entity.Scene.Camera.ScreenToWorldPoint(Input.MousePosition).X < _player.Transform.Position.X)
+            {
+                _player.Animator.FlipX = true;
+            }
+            else
+            {
+                _player.Animator.FlipX = false;
+            }
+            if (attackNum > 2)
             {
                 attackNum = 0;
             }
+
             base.StateEnter();
         }
 
@@ -58,7 +63,9 @@ namespace LichEngine.Portable.States.PlayerStates
 
         public override void StateExit()
         {
-            attackNum++;
+            
+            var sheathe = _player.StateMachine.States[STATES.PLAYER_FREE] as PlayerStateFree;
+            sheathe.SetUnSheathe();
             base.StateExit();
         }
 

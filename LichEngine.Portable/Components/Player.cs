@@ -17,14 +17,16 @@ namespace LichEngine.GameCode.Components
         public SpriteAnimator Animator;
         public SubpixelVector2 _subpixelV2 = new SubpixelVector2();
         public Mover Mover;
-        [Range(0, 500, 10)]
-        public float MoveSpeed = 100f;
+        [Range(0, 10, .5f)]
+        public float MoveSpeed = 1f;
+        [NotInspectable]
+        public float MoveSpeedModifier = 100f;
         public VirtualIntegerAxis X_AxisInput;
         public VirtualIntegerAxis Y_AxisInput;
         public VirtualButton AttackInput;
-        public FollowCamera _camera;
-        public CircleCollider _collider;
-        public StateMachine _stateMachine;
+        public FollowCamera Camera;
+        public CircleCollider Collider;
+        public StateMachine StateMachine;
         #endregion
 
         public override void OnAddedToEntity()
@@ -46,19 +48,24 @@ namespace LichEngine.GameCode.Components
             Animator = Entity.AddComponent<SpriteAnimator>();
 
             //Set up collider
-            _collider = Entity.AddComponent<CircleCollider>();
-            _collider.Radius = 10;
-            _collider.SetLocalOffset(new Vector2(0, 8));
+            Collider = Entity.AddComponent<CircleCollider>();
+            Collider.Radius = 10;
+            Collider.SetLocalOffset(new Vector2(0, 8));
             
             //Set up StateMachine
-            _stateMachine = Entity.AddComponent(new StateMachine());
-            _stateMachine.AddState(STATES.PLAYER_FREE, new PlayerStateFree(this));
-            _stateMachine.AddState(STATES.PLAYER_ATTACK, new PlayerStateAttack(this));
-            _stateMachine.CurrentState = STATES.PLAYER_FREE;
+            StateMachine = Entity.AddComponent(new StateMachine());
+            StateMachine.AddState(STATES.PLAYER_FREE, new PlayerStateFree(this));
+            StateMachine.AddState(STATES.PLAYER_ATTACK, new PlayerStateAttack(this));
+            StateMachine.CurrentState = STATES.PLAYER_FREE;
+
+            //Set up Camera
+            var camera = new FollowCamera(Entity);
+            Entity.AddComponent(camera);
+            Entity.Scene.AddRenderer(new DefaultRenderer(camera: camera.Camera));
             #endregion
 
             #region Animations...
-            Animator.AddAnimation("IdleSheathed", 4, new[]
+            Animator.AddAnimation("IdleSheathed", 3.5f, new[]
             {
                 idleSprite[0],
                 idleSprite[1],
@@ -66,7 +73,7 @@ namespace LichEngine.GameCode.Components
                 idleSprite[3]
                 
             });
-            Animator.AddAnimation("IdleUnSheathed", 4, new[]
+            Animator.AddAnimation("IdleUnSheathed", 3.5f, new[]
             {
                 idleSprite[4],
                 idleSprite[5],
@@ -100,7 +107,7 @@ namespace LichEngine.GameCode.Components
                 attackSprite[4],
                 attackSprite[5],
             });
-            Animator.AddAnimation("Attack1", 12, new[]
+            Animator.AddAnimation("Attack1", 10, new[]
             {
                 attackSprite[6],
                 attackSprite[7],
@@ -108,7 +115,7 @@ namespace LichEngine.GameCode.Components
                 attackSprite[9],
                 attackSprite[10]
             });
-            Animator.AddAnimation("Attack2", 12, new[]
+            Animator.AddAnimation("Attack2", 8, new[]
             {
                 attackSprite[11],
                 attackSprite[12],
@@ -141,6 +148,7 @@ namespace LichEngine.GameCode.Components
             //Attack input
             AttackInput = new VirtualButton();
             AttackInput.Nodes.Add(new VirtualButton.KeyboardKey(Keys.Space));
+            AttackInput.Nodes.Add(new VirtualButton.MouseLeftButton());
         }
 
         

@@ -26,10 +26,6 @@ namespace LichEngine.Portable.States
             {
                 States[CurrentState].Run();
             }
-            else
-            {
-                
-            }
         }
 
         public void SetState(STATES state)
