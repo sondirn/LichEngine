@@ -138,12 +138,14 @@ namespace LichEngine.GameCode.Components
             X_AxisInput.Nodes.Add(new VirtualAxis.GamePadDpadLeftRight());
             X_AxisInput.Nodes.Add(new VirtualAxis.GamePadLeftStickX());
             X_AxisInput.Nodes.Add(new VirtualAxis.KeyboardKeys(VirtualInput.OverlapBehavior.TakeNewer, Keys.A, Keys.D));
+            X_AxisInput.Nodes.Add(new VirtualAxis.KeyboardKeys(VirtualInput.OverlapBehavior.TakeNewer, Keys.Left, Keys.Right));
 
             // vertical input from dpad, left stick or keyboard up/down
             Y_AxisInput = new VirtualIntegerAxis();
             Y_AxisInput.Nodes.Add(new VirtualAxis.GamePadDpadUpDown());
             Y_AxisInput.Nodes.Add(new VirtualAxis.GamePadLeftStickY());
             Y_AxisInput.Nodes.Add(new VirtualAxis.KeyboardKeys(VirtualInput.OverlapBehavior.TakeNewer, Keys.W, Keys.S));
+            Y_AxisInput.Nodes.Add(new VirtualAxis.KeyboardKeys(VirtualInput.OverlapBehavior.TakeNewer, Keys.Up, Keys.Down));
 
             //Attack input
             AttackInput = new VirtualButton();
