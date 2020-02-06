@@ -15,9 +15,9 @@ namespace LichEngine.Portable
     public class LichEngineMain : Core
     {
 
-        public LichEngineMain() : base(2560, 1440, true, true, "LichEngine")
+        public LichEngineMain() : base(1920, 1080, false, true, "LichEngine")
         {
-            Core.DebugRenderEnabled = true;
+            //Core.DebugRenderEnabled = true;
             
 
         }
@@ -26,8 +26,8 @@ namespace LichEngine.Portable
         {
             base.Initialize();
             Scene = new SandBoxScene();
-            Screen.SetSize(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
-            Window.IsBorderless = true;
+            //Screen.SetSize(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
+            //Window.IsBorderless = true;
         }
 
     }

@@ -10,7 +10,7 @@ namespace LichEngine.GameCode.Scenes
         {
             base.Initialize();
             ClearColor = Color.CornflowerBlue;
-            SetDesignResolution(640, 360, SceneResolutionPolicy.FixedHeight);
+            SetDesignResolution(640, 360, SceneResolutionPolicy.ShowAll);
             AddRenderer(new DefaultRenderer());
 
             var tiledMap = Content.LoadTiledMap("Content/TiledMaps/MapTest.tmx");
@@ -19,6 +19,10 @@ namespace LichEngine.GameCode.Scenes
 
             var player = CreateEntity("player");
             player.AddComponent(new Player());
+
+            var box = CreateEntity("box");
+            box.Transform.Position = new Vector2(129, 129);
+            box.AddComponent(new CircleCollider(32));
             
         }
 
