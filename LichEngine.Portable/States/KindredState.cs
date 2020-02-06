@@ -16,13 +16,16 @@ namespace LichEngine.Portable.States
         { Entered = true; }
         
         public virtual void Update()
-        { }
+        {
+        }
 
         public virtual void LateUpdate()
         { }
 
         public virtual void StateExit()
-        { }
+        {
+            Entered = false;
+        }
 
         public virtual void Run()
         {
@@ -32,10 +35,7 @@ namespace LichEngine.Portable.States
             }
             Update();
             LateUpdate();
-            if (Exiting)
-            {
-                StateExit();
-            }
+            
         }
 
         public void ChangeState(string name)

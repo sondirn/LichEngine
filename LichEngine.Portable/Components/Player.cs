@@ -6,19 +6,22 @@ using System;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
 using LichEngine.Portable.States;
+using LichEngine.States;
+using LichEngine.Portable.States.PlayerStates;
 
 namespace LichEngine.GameCode.Components
 {
-    class Player : Component, ITriggerListener, IUpdatable
+    public class Player : Component, ITriggerListener, IUpdatable
     {
         #region Fields
-        public SpriteAnimator _animator;
+        public SpriteAnimator Animator;
         public SubpixelVector2 _subpixelV2 = new SubpixelVector2();
-        public Mover _mover;
-        public float _moveSpeed = 100f;
-        public VirtualIntegerAxis _xAxisInput;
-        public VirtualIntegerAxis _yAxisInput;
-        public VirtualButton _attackInput;
+        public Mover Mover;
+        [Range(0, 500, 10)]
+        public float MoveSpeed = 100f;
+        public VirtualIntegerAxis X_AxisInput;
+        public VirtualIntegerAxis Y_AxisInput;
+        public VirtualButton AttackInput;
         public FollowCamera _camera;
         public CircleCollider _collider;
         public StateMachine _stateMachine;
@@ -38,27 +41,24 @@ namespace LichEngine.GameCode.Components
 
             #region add componentents...
             //Movement component
-            _mover = Entity.AddComponent(new Mover());
+            Mover = Entity.AddComponent(new Mover());
             //animator component
-            _animator = Entity.AddComponent<SpriteAnimator>();
+            Animator = Entity.AddComponent<SpriteAnimator>();
 
             //Set up collider
             _collider = Entity.AddComponent<CircleCollider>();
             _collider.Radius = 10;
             _collider.SetLocalOffset(new Vector2(0, 8));
-
-            //Set Up Camera
-            _camera = Entity.AddComponent(new FollowCamera(Entity));
-            //_camera.FollowLerp = .03f;
-
+            
             //Set up StateMachine
             _stateMachine = Entity.AddComponent(new StateMachine());
             _stateMachine.AddState(STATES.PLAYER_FREE, new PlayerStateFree(this));
+            _stateMachine.AddState(STATES.PLAYER_ATTACK, new PlayerStateAttack(this));
             _stateMachine.CurrentState = STATES.PLAYER_FREE;
             #endregion
 
             #region Animations...
-            _animator.AddAnimation("IdleSheathed", new[]
+            Animator.AddAnimation("IdleSheathed", 4, new[]
             {
                 idleSprite[0],
                 idleSprite[1],
@@ -66,14 +66,14 @@ namespace LichEngine.GameCode.Components
                 idleSprite[3]
                 
             });
-            _animator.AddAnimation("IdleUnSheathed", new[]
+            Animator.AddAnimation("IdleUnSheathed", 4, new[]
             {
                 idleSprite[4],
                 idleSprite[5],
                 idleSprite[6],
                 idleSprite[7]
             });
-            _animator.AddAnimation("RunSheathed", new[]
+            Animator.AddAnimation("RunSheathed", 7.5f, new[]
             {
                 runSprite[0],
                 runSprite[1],
@@ -82,7 +82,7 @@ namespace LichEngine.GameCode.Components
                 runSprite[4],
                 runSprite[5]
             });
-            _animator.AddAnimation("RunUnSheathed", new[]
+            Animator.AddAnimation("RunUnSheathed", 7.5f, new[]
             {
                 runSprite[6],
                 runSprite[7],
@@ -90,6 +90,32 @@ namespace LichEngine.GameCode.Components
                 runSprite[9],
                 runSprite[10],
                 runSprite[11]
+            });
+            Animator.AddAnimation("Attack0", 12, new[]
+            {
+                attackSprite[0],
+                attackSprite[1],
+                attackSprite[2],
+                attackSprite[3],
+                attackSprite[4],
+                attackSprite[5],
+            });
+            Animator.AddAnimation("Attack1", 12, new[]
+            {
+                attackSprite[6],
+                attackSprite[7],
+                attackSprite[8],
+                attackSprite[9],
+                attackSprite[10]
+            });
+            Animator.AddAnimation("Attack2", 12, new[]
+            {
+                attackSprite[11],
+                attackSprite[12],
+                attackSprite[13],
+                attackSprite[14],
+                attackSprite[15],
+                attackSprite[16]
             });
             #endregion
             //Set up Input
@@ -101,20 +127,20 @@ namespace LichEngine.GameCode.Components
         private void SetupInput()
         {
             // horizontal input from dpad, left stick or keyboard left/right
-            _xAxisInput = new VirtualIntegerAxis();
-            _xAxisInput.Nodes.Add(new VirtualAxis.GamePadDpadLeftRight());
-            _xAxisInput.Nodes.Add(new VirtualAxis.GamePadLeftStickX());
-            _xAxisInput.Nodes.Add(new VirtualAxis.KeyboardKeys(VirtualInput.OverlapBehavior.TakeNewer, Keys.A, Keys.D));
+            X_AxisInput = new VirtualIntegerAxis();
+            X_AxisInput.Nodes.Add(new VirtualAxis.GamePadDpadLeftRight());
+            X_AxisInput.Nodes.Add(new VirtualAxis.GamePadLeftStickX());
+            X_AxisInput.Nodes.Add(new VirtualAxis.KeyboardKeys(VirtualInput.OverlapBehavior.TakeNewer, Keys.A, Keys.D));
 
             // vertical input from dpad, left stick or keyboard up/down
-            _yAxisInput = new VirtualIntegerAxis();
-            _yAxisInput.Nodes.Add(new VirtualAxis.GamePadDpadUpDown());
-            _yAxisInput.Nodes.Add(new VirtualAxis.GamePadLeftStickY());
-            _yAxisInput.Nodes.Add(new VirtualAxis.KeyboardKeys(VirtualInput.OverlapBehavior.TakeNewer, Keys.W, Keys.S));
+            Y_AxisInput = new VirtualIntegerAxis();
+            Y_AxisInput.Nodes.Add(new VirtualAxis.GamePadDpadUpDown());
+            Y_AxisInput.Nodes.Add(new VirtualAxis.GamePadLeftStickY());
+            Y_AxisInput.Nodes.Add(new VirtualAxis.KeyboardKeys(VirtualInput.OverlapBehavior.TakeNewer, Keys.W, Keys.S));
 
             //Attack input
-            _attackInput = new VirtualButton();
-            _attackInput.Nodes.Add(new VirtualButton.KeyboardKey(Keys.Space));
+            AttackInput = new VirtualButton();
+            AttackInput.Nodes.Add(new VirtualButton.KeyboardKey(Keys.Space));
         }
 
         

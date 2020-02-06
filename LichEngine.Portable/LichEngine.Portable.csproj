@@ -58,7 +58,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scenes\SandBoxScene.cs" />
     <Compile Include="States\KindredState.cs" />
-    <Compile Include="States\PlayerStateFree.cs" />
+    <Compile Include="States\PlayerStates\PlayerStateAttack.cs" />
+    <Compile Include="States\PlayerStates\PlayerStateFree.cs" />
     <Compile Include="States\StateMachine.cs" />
     <Compile Include="Utilities\ContentPathGenerator.cs">
       <AutoGen>True</AutoGen>

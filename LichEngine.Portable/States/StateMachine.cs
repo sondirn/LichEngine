@@ -20,18 +20,21 @@ namespace LichEngine.Portable.States
 
         public void Update()
         {
+            if (!Enabled)
+                return;
             if (States.ContainsKey(CurrentState))
             {
                 States[CurrentState].Run();
             }
             else
             {
-                throw new NotImplementedException("State " + CurrentState + " Is not implemented");
+                
             }
         }
 
         public void SetState(STATES state)
         {
+            States[CurrentState].StateExit();
             CurrentState = state;
         }
 

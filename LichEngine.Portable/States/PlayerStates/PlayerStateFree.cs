@@ -1,4 +1,5 @@
 ﻿using LichEngine.GameCode.Components;
+using LichEngine.Portable.States;
 using Microsoft.Xna.Framework;
 using Nez;
 using System;
@@ -7,9 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LichEngine.Portable.States
+namespace LichEngine.States
 {
-    class PlayerStateFree : KindredState
+    public class PlayerStateFree : KindredState
     {
         private Player _player;
         private bool Sheathed = false;
@@ -20,45 +21,47 @@ namespace LichEngine.Portable.States
 
         public override void Update()
         {
+            if (_player.AttackInput.IsDown)
+            {
+                _player._stateMachine.SetState(STATES.PLAYER_ATTACK);
+                return;
+            }
             //Calculate movement 
-            var moveDir = new Vector2(_player._xAxisInput.Value, _player._yAxisInput.Value);
+            var moveDir = new Vector2(_player.X_AxisInput.Value, _player.Y_AxisInput.Value);
             var animation = "Run" + GetSheathe();
             //handle movement
             if (moveDir != Vector2.Zero)
             {
                 //animation
-                _player._animator.Speed = .75f;
+                _player.Animator.Speed = 1;
                 animation = "Run" + GetSheathe();
-                if (!_player._animator.IsAnimationActive(animation))
-                    _player._animator.Play(animation);
+                if (!_player.Animator.IsAnimationActive(animation))
+                    _player.Animator.Play(animation);
                 else
-                    _player._animator.UnPause();
+                    _player.Animator.UnPause();
                 //Flip depending on where we are facing
                 if (moveDir.X > 0)
-                    _player._animator.FlipX = false;
+                    _player.Animator.FlipX = false;
                 if (moveDir.X < 0)
-                    _player._animator.FlipX = true;
+                    _player.Animator.FlipX = true;
                 //move character
                 moveDir = Vector2.Normalize(moveDir);
-                var movement = moveDir * _player._moveSpeed * Time.DeltaTime;
-                _player._mover.CalculateMovement(ref movement, out var res);
+                var movement = moveDir * _player.MoveSpeed * Time.DeltaTime;
+                _player.Mover.CalculateMovement(ref movement, out var res);
                 _player._subpixelV2.Update(ref movement);
-                _player._mover.ApplyMovement(movement);
+                _player.Mover.ApplyMovement(movement);
             }
             else
             {
                 animation = "Idle" + GetSheathe();
-                _player._animator.Speed = .50f;
-                if (!_player._animator.IsAnimationActive(animation))
-                    _player._animator.Play(animation);
+                _player.Animator.Speed = 1;
+                if (!_player.Animator.IsAnimationActive(animation))
+                    _player.Animator.Play(animation);
                 else
-                    _player._animator.UnPause();
+                    _player.Animator.UnPause();
 
             }
-            if (_player._attackInput.IsPressed)
-            {
-                Sheathed = !Sheathed;
-            }
+            
             base.Update();
         }
 
