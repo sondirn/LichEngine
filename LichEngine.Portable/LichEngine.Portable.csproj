@@ -83,8 +83,8 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Nez\Nez.Portable\Nez.csproj">
-      <Project>{b8aa2bd5-1d9f-4e22-9df9-0619837009d4}</Project>
+    <ProjectReference Include="..\Nez.Portable\Nez.csproj">
+      <Project>{d5bb73ca-07e7-4204-b175-a93a577dcc6a}</Project>
       <Name>Nez</Name>
     </ProjectReference>
   </ItemGroup>

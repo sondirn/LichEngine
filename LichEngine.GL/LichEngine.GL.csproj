@@ -119,13 +119,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Nez\Nez.Portable\Nez.csproj">
-      <Project>{b8aa2bd5-1d9f-4e22-9df9-0619837009d4}</Project>
-      <Name>Nez</Name>
-    </ProjectReference>
     <ProjectReference Include="..\LichEngine.Portable\LichEngine.Portable.csproj">
       <Project>{a25b5ff0-4aba-4b5c-bea5-5e5db9637cf6}</Project>
       <Name>LichEngine.Portable</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Nez.Portable\Nez.csproj">
+      <Project>{d5bb73ca-07e7-4204-b175-a93a577dcc6a}</Project>
+      <Name>Nez</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\LichEngine.GameCode\LichEngine.GameCode.projitems" Label="Shared" />
