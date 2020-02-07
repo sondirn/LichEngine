@@ -78,9 +78,10 @@ namespace Nez
 		{
 			public const string DefaultTexture = @"Textures\DefaultTexture";
 			public const string HeroAttack = @"Textures\Hero-Attack";
+			public const string HeroFall = @"Textures\Hero-Fall";
 			public const string HeroIdle = @"Textures\Hero-Idle";
+			public const string HeroJump = @"Textures\Hero-Jump";
 			public const string HeroRun = @"Textures\Hero-Run";
-			public const string HeroRun2 = @"Textures\Hero-Run2";
 			public const string Hero = @"Textures\Hero";
 		}
 

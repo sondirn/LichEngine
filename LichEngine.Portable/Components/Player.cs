@@ -40,9 +40,13 @@ namespace LichEngine.GameCode.Components
             var idleTexture     = Entity.Scene.Content.Load<Texture2D>(Content.Textures.HeroIdle);
             var runTexture      = Entity.Scene.Content.Load<Texture2D>(Content.Textures.HeroRun);
             var attackTexture   = Entity.Scene.Content.Load<Texture2D>(Content.Textures.HeroAttack);
+            var jumpTexture     = Entity.Scene.Content.Load<Texture2D>(Content.Textures.HeroJump);
+            var fallTexture     = Entity.Scene.Content.Load<Texture2D>(Content.Textures.HeroFall);
             var idleSprite      = Sprite.SpritesFromAtlas(idleTexture, 50, 37);
             var runSprite       = Sprite.SpritesFromAtlas(runTexture, 50, 37);
             var attackSprite    = Sprite.SpritesFromAtlas(attackTexture, 50, 37);
+            var jumpSprite      = Sprite.SpritesFromAtlas(jumpTexture, 50, 37);
+            var fallSprite      = Sprite.SpritesFromAtlas(fallTexture, 50, 37);
             #endregion
 
             #region add componentents...
@@ -133,6 +137,17 @@ namespace LichEngine.GameCode.Components
                 attackSprite[15],
                 attackSprite[16]
             });
+            Animator.AddAnimation("Jump", 15, new[]{
+                //jumpSprite[0],
+                //jumpSprite[1],
+                jumpSprite[2],
+                jumpSprite[3]
+            });
+            Animator.AddAnimation("Fall", 8, new[]
+            {
+                fallSprite[0],
+                fallSprite[1]
+            });
             #endregion
             //Set up Input
             SetupInput();
@@ -159,6 +174,7 @@ namespace LichEngine.GameCode.Components
             //Attack input
             AttackInput = new VirtualButton();
             AttackInput.Nodes.Add(new VirtualButton.MouseLeftButton());
+            AttackInput.Nodes.Add(new VirtualButton.KeyboardKey(Keys.M));
 
             //Jump INput
             JumpInput = new VirtualButton();

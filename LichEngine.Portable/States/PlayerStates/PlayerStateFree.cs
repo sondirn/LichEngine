@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Nez.Sprites.SpriteAnimator;
 
 namespace LichEngine.States
 {
@@ -44,16 +45,27 @@ namespace LichEngine.States
         public override void StateEnter()
         {
             _attackComboResetTimer = 0.0f;
+            if (_player.AttackInput.IsPressed && _player.CollisionState.Below)
+            {
+                _player.StateMachine.SetState(STATES.PLAYER_ATTACK);
+            }
             base.StateEnter();
         }
 
         public override void Update()
         {
+            //Check for attack
+            if (_player.AttackInput.IsPressed && _player.CollisionState.Below)
+            {
+                _player.StateMachine.SetState(STATES.PLAYER_ATTACK);
+                return;
+            }
             _maxSpeed = _player.MoveSpeed * _player.MoveSpeedModifier * Time.DeltaTime;
             var tempAcceleration = _acceleration * _player.MoveSpeed * Time.DeltaTime;
             var tempDeceleration = _deceleration * _player.MoveSpeed * Time.DeltaTime;
             if(!_player.CollisionState.Below) { tempAcceleration /= 2f; }
             string animation = null;
+            var loopMode = LoopMode.Loop;
             var moveDir = new Vector2(_player.X_AxisInput.Value, 0);
             if (moveDir.X < 0)
             { 
@@ -135,12 +147,14 @@ namespace LichEngine.States
                 _velocity.Y = 0f;
                 _jumpGrace = 0;
             }
+            //jump animations
+            if(_velocity.Y < 0) { animation = "Jump"; loopMode = LoopMode.Once; }else if(_velocity.Y > 0) { animation = "Fall"; loopMode = LoopMode.Loop; }
             
+
             _player.Mover.Move(_velocity, _player.Collider, _player.CollisionState);
-            Console.WriteLine(_jumpQueued);
 
             if (animation != null && !_player.Animator.IsAnimationActive(animation))
-                _player.Animator.Play(animation);
+                _player.Animator.Play(animation, loopMode);
 
             base.Update();
         }

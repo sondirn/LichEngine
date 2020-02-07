@@ -15,7 +15,7 @@ namespace LichEngine.Portable
     public class LichEngineMain : Core
     {
 
-        public LichEngineMain() : base(1920, 1080, false, true, "LichEngine")
+        public LichEngineMain() : base(1920, 1080, true, true, "LichEngine")
         {
             //Core.DebugRenderEnabled = true;
             IsFixedTimeStep = true;
