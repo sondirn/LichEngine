@@ -17,37 +17,32 @@ namespace LichEngine.Portable.States.PlayerStates
         public int attackNum;
         private bool _attackQueued = false;
         private float _attackQueueTimer = 0.0f;
+        private float _attackQueueEnd = .2f;
 
         public PlayerStateAttack(Player player)
         {
             _player = player;
             _stateMachine = player.StateMachine;
-            player.Animator.OnAnimationCompletedEvent += Animator_OnAnimationCompletedEvent;
             attackNum = 0;
         }
 
         private void Animator_OnAnimationCompletedEvent(string obj)
         {
+            
             attackNum++;
-            if (_attackQueueTimer < .15f && _attackQueued)
+            if (_attackQueueTimer < _attackQueueEnd && _attackQueued)
             {
                 _stateMachine.SetState(STATES.PLAYER_ATTACK);
                 return;
             }
             _stateMachine.SetState(STATES.PLAYER_FREE);
+             
             
         }
 
         public override void StateEnter()
         {
-            //if (_player.Entity.Scene.Camera.ScreenToWorldPoint(Input.MousePosition).X < _player.Transform.Position.X)
-            //{
-            //    _player.Animator.FlipX = true;
-            //}
-            //else
-            //{
-            //    _player.Animator.FlipX = false;
-            //}
+            _player.Animator.OnAnimationCompletedEvent += Animator_OnAnimationCompletedEvent;
             _attackQueued = false;
             
 
@@ -66,7 +61,7 @@ namespace LichEngine.Portable.States.PlayerStates
                 _attackQueueTimer = 0.0f;
             }
             _attackQueueTimer += Time.DeltaTime;
-            if (_attackQueueTimer >= .15f)
+            if (_attackQueueTimer >= _attackQueueEnd)
                 _attackQueued = false;
             var animation = "Attack" + attackNum.ToString();
             if (!_player.Animator.IsAnimationActive(animation))
@@ -81,7 +76,8 @@ namespace LichEngine.Portable.States.PlayerStates
             
             var sheathe = _player.StateMachine.States[STATES.PLAYER_FREE] as PlayerStateFree;
             sheathe.SetUnSheathe();
-            
+            //sheathe._velocity.X = 0;
+            _player.Animator.OnAnimationCompletedEvent -= Animator_OnAnimationCompletedEvent;
             base.StateExit();
         }
 

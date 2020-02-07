@@ -24,11 +24,12 @@ namespace LichEngine.States
         private float _deceleration = 1000f;
         private float _maxSpeed = 100;
         private float _jumpVelocity = 2.3f;
-        private float _fallMult = 1.5f;
+        private float _fallMult = 1.3f;
         private float _lowJumpMult = 1.7f;
         private float _landFallQueue = 0f;
+        private float _landFallQueueEnd = .17f;
         private bool _jumpQueued = false;
-        Vector2 _velocity;
+        public Vector2 _velocity;
         Vector2 _movement;
         public PlayerStateFree(Player player)
         {
@@ -110,9 +111,12 @@ namespace LichEngine.States
             if(!_player.CollisionState.Below)
             {
                 _jumpGrace += Time.DeltaTime;
+                
                 //Queue jump while falling
                 if (_player.JumpInput.IsPressed) { _landFallQueue = 0f; _jumpQueued = true; }
                 _landFallQueue += Time.DeltaTime;
+                if (_landFallQueue >= _landFallQueueEnd)
+                    _jumpQueued = false;
             }
             //jump
             if (_jumpGrace < .1f && _player.JumpInput.IsPressed)
@@ -121,13 +125,13 @@ namespace LichEngine.States
                 _jumpGrace = 1f;
             }
             //jump if queued
-            if (_player.CollisionState.BecameGroundedThisFrame && _jumpQueued && _landFallQueue < .15f)
+            if (_player.CollisionState.BecameGroundedThisFrame && _jumpQueued && _landFallQueue < _landFallQueueEnd)
             {
                 _velocity.Y = -Mathf.Sqrt(_jumpVelocity * Gravity);
                 _jumpQueued = false;
                 _jumpGrace = 1f;
             }
-            
+            //better jumping
             if(_velocity.Y > 0)
             {
                 //Faster Falling
@@ -157,6 +161,12 @@ namespace LichEngine.States
                 _player.Animator.Play(animation, loopMode);
 
             base.Update();
+        }
+
+        public override void StateExit()
+        {
+            _velocity.X = 0;
+            base.StateExit();
         }
 
         public void SetSheathe()
