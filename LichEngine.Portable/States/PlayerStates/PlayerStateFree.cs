@@ -15,14 +15,30 @@ namespace LichEngine.States
     {
         private Player _player;
         public bool Sheathed = false;
+        public float Gravity = 13f;
         private float _sheathedTimer;
         private float _attackComboResetTimer;
+        private float _jumpGrace;
+        private float _acceleration = 1000f;
+        private float _deceleration = 1000f;
+        private float _maxSpeed = 100;
+        private float _jumpVelocity = 2.3f;
+        private float _fallMult = 1.5f;
+        private float _lowJumpMult = 1.7f;
+        private float _landFallQueue = 0f;
+        private bool _jumpQueued = false;
+        Vector2 _velocity;
+        Vector2 _movement;
         public PlayerStateFree(Player player)
         {
             _player = player;
             Sheathed = true;
             _sheathedTimer = 0.0f;
             _attackComboResetTimer = 0.0f;
+            _jumpGrace = 0.0f;
+            _movement = Vector2.Zero;
+            _velocity = Vector2.Zero;
+            _maxSpeed = player.MoveSpeed * player.MoveSpeedModifier;
         }
 
         public override void StateEnter()
@@ -33,65 +49,99 @@ namespace LichEngine.States
 
         public override void Update()
         {
-            _attackComboResetTimer += Time.DeltaTime;
-            if (_attackComboResetTimer > .3f)
-            {
-                var attackState = _player.StateMachine.States[STATES.PLAYER_ATTACK] as PlayerStateAttack;
-                attackState.attackNum = 0;
-            }
-            if (_player.AttackInput.IsPressed)
-            {
-                _player.StateMachine.SetState(STATES.PLAYER_ATTACK);
-                return;
-            }
-            //Calculate movement 
-            var moveDir = new Vector2(_player.X_AxisInput.Value, _player.Y_AxisInput.Value);
-            var animation = "Run" + GetSheathe();
-            //handle movement
-            if (moveDir != Vector2.Zero)
-            {
-                //reset sheathe timer
-                _sheathedTimer = 0.0f;
-                //animation
-                //_player.Animator.Speed = 1;
+            _maxSpeed = _player.MoveSpeed * _player.MoveSpeedModifier * Time.DeltaTime;
+            var tempAcceleration = _acceleration * _player.MoveSpeed * Time.DeltaTime;
+            var tempDeceleration = _deceleration * _player.MoveSpeed * Time.DeltaTime;
+            if(!_player.CollisionState.Below) { tempAcceleration /= 2f; }
+            string animation = null;
+            var moveDir = new Vector2(_player.X_AxisInput.Value, 0);
+            if (moveDir.X < 0)
+            { 
+                //move left
+                _velocity.X += -tempAcceleration * Time.DeltaTime;
+                _player.Animator.FlipX = true;
                 animation = "Run" + GetSheathe();
-                if (!_player.Animator.IsAnimationActive(animation))
-                    _player.Animator.Play(animation);
-                else
-                    _player.Animator.UnPause();
-                //Flip depending on where we are facing
-                if (moveDir.X > 0)
-                    _player.Animator.FlipX = false;
-                if (moveDir.X < 0)
-                    _player.Animator.FlipX = true;
-                //move character
-                moveDir = Vector2.Normalize(moveDir);
-                var movement = moveDir * _player.MoveSpeed * _player.MoveSpeedModifier * Time.DeltaTime;
-                _player.Mover.CalculateMovement(ref movement, out var res);
-                _player._subpixelV2.Update(ref movement);
-                _player.Mover.ApplyMovement(movement);
+                //clamp speed
+                if (_velocity.X < -_maxSpeed)
+                    _velocity.X = -_maxSpeed;
+            }
+            else if (moveDir.X > 0)
+            {
+                //move right
+                _velocity.X += tempAcceleration * Time.DeltaTime;
+                _player.Animator.FlipX = false;
+                animation = "Run" + GetSheathe();
+                //clamp speed
+                if (_velocity.X > _maxSpeed)
+                    _velocity.X = _maxSpeed;
             }
             else
             {
-                //start sheathing timer
-                if (!Sheathed)
+                //Drag
+                if (_velocity.X > tempDeceleration * Time.DeltaTime)
                 {
-                    _sheathedTimer += Time.DeltaTime;
+                    _velocity.X -= tempDeceleration * Time.DeltaTime;
                 }
-                if (_sheathedTimer > 3f)
+                else if (_velocity.X < -tempDeceleration * Time.DeltaTime)
                 {
-                    //sheathe weapon
-                    SetSheathe();
+                    _velocity.X += tempDeceleration * Time.DeltaTime;
                 }
-                animation = "Idle" + GetSheathe();
-                //_player.Animator.Speed = 1;
-                if (!_player.Animator.IsAnimationActive(animation))
-                    _player.Animator.Play(animation);
                 else
-                    _player.Animator.UnPause();
+                {
+                    _velocity.X = 0f;
+                    animation = "Idle" + GetSheathe();
+                }
 
             }
+
+            //jump grace
+            if(!_player.CollisionState.Below)
+            {
+                _jumpGrace += Time.DeltaTime;
+                //Queue jump while falling
+                if (_player.JumpInput.IsPressed) { _landFallQueue = 0f; _jumpQueued = true; }
+                _landFallQueue += Time.DeltaTime;
+            }
+            //jump
+            if (_jumpGrace < .1f && _player.JumpInput.IsPressed)
+            {
+                _velocity.Y = -Mathf.Sqrt(_jumpVelocity * Gravity);
+                _jumpGrace = 1f;
+            }
+            //jump if queued
+            if (_player.CollisionState.BecameGroundedThisFrame && _jumpQueued && _landFallQueue < .15f)
+            {
+                _velocity.Y = -Mathf.Sqrt(_jumpVelocity * Gravity);
+                _jumpQueued = false;
+                _jumpGrace = 1f;
+            }
             
+            if(_velocity.Y > 0)
+            {
+                //Faster Falling
+                _velocity += Vector2.UnitY * Gravity * _fallMult * Time.DeltaTime;
+            }else if(_velocity.Y < 0 && !_player.JumpInput.IsDown)
+            {
+                _velocity += Vector2.UnitY * Gravity * _lowJumpMult * Time.DeltaTime;
+            }
+            //Set Vertical Velocity to 0 if colliding with something above
+            if (_player.CollisionState.Above) { _velocity.Y = 0f; }
+
+            //Apply Gravity
+            _velocity.Y += Gravity * Time.DeltaTime;
+            //reset y velocity if touching ground
+            if (_player.CollisionState.Below && _velocity.Y >= 0)
+            {
+                _velocity.Y = 0f;
+                _jumpGrace = 0;
+            }
+            
+            _player.Mover.Move(_velocity, _player.Collider, _player.CollisionState);
+            Console.WriteLine(_jumpQueued);
+
+            if (animation != null && !_player.Animator.IsAnimationActive(animation))
+                _player.Animator.Play(animation);
+
             base.Update();
         }
 

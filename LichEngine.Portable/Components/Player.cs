@@ -8,6 +8,8 @@ using Microsoft.Xna.Framework;
 using LichEngine.Portable.States;
 using LichEngine.States;
 using LichEngine.Portable.States.PlayerStates;
+using Nez.Tiled;
+using LichEngine.GameCode.Scenes;
 
 namespace LichEngine.GameCode.Components
 {
@@ -16,16 +18,18 @@ namespace LichEngine.GameCode.Components
         #region Fields
         public SpriteAnimator Animator;
         public SubpixelVector2 _subpixelV2 = new SubpixelVector2();
-        public Mover Mover;
+        public TiledMapMover Mover;
+        public TiledMapMover.CollisionState CollisionState = new TiledMapMover.CollisionState();
         [Range(0, 10, .5f)]
-        public float MoveSpeed = 1f;
+        public float MoveSpeed = 1.5f;
         [NotInspectable]
-        public float MoveSpeedModifier = 100f;
+        public float MoveSpeedModifier = 100;
         public VirtualIntegerAxis X_AxisInput;
         public VirtualIntegerAxis Y_AxisInput;
         public VirtualButton AttackInput;
+        public VirtualButton JumpInput;
         public FollowCamera Camera;
-        public CircleCollider Collider;
+        public BoxCollider Collider;
         public StateMachine StateMachine;
         #endregion
 
@@ -43,14 +47,16 @@ namespace LichEngine.GameCode.Components
 
             #region add componentents...
             //Movement component
-            Mover = Entity.AddComponent(new Mover());
+            var map = Entity.Scene as SandBoxScene;
+            Mover = Entity.AddComponent(new TiledMapMover(map.TiledMap.GetLayer<TmxLayer>("main")));
             //animator component
             Animator = Entity.AddComponent<SpriteAnimator>();
 
             //Set up collider
-            Collider = Entity.AddComponent<CircleCollider>();
-            Collider.Radius = 10;
-            Collider.SetLocalOffset(new Vector2(0, 8));
+            Collider = Entity.AddComponent<BoxCollider>();
+            Collider.Width = 16;
+            Collider.Height = 30;
+            Collider.SetLocalOffset(new Vector2(0, 3));
             
             //Set up StateMachine
             StateMachine = Entity.AddComponent(new StateMachine());
@@ -60,8 +66,11 @@ namespace LichEngine.GameCode.Components
 
             //Set up Camera
             var camera = new FollowCamera(Entity);
+            camera.MapLockEnabled = true;
             Entity.AddComponent(camera);
             Entity.Scene.AddRenderer(new DefaultRenderer(camera: camera.Camera));
+            camera.MapSize = new Vector2(1000, 0);
+            camera.FollowLerp = .3f;
             #endregion
 
             #region Animations...
@@ -149,8 +158,11 @@ namespace LichEngine.GameCode.Components
 
             //Attack input
             AttackInput = new VirtualButton();
-            AttackInput.Nodes.Add(new VirtualButton.KeyboardKey(Keys.Space));
             AttackInput.Nodes.Add(new VirtualButton.MouseLeftButton());
+
+            //Jump INput
+            JumpInput = new VirtualButton();
+            JumpInput.Nodes.Add(new VirtualButton.KeyboardKey(Keys.Space));
         }
 
         

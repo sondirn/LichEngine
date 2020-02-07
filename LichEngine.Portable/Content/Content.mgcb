@@ -427,9 +427,15 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Hero-Run.png
 
+#begin TiledMaps/CaveTest.tmx
+/copy:TiledMaps/CaveTest.tmx
+
 #begin TiledMaps/MapTest.tmx
 /copy:TiledMaps/MapTest.tmx
 
 #begin TiledMaps/OutDoor.png
 /copy:TiledMaps/OutDoor.png
+
+#begin TiledMaps/OutSide.png
+/copy:TiledMaps/OutSide.png
 
