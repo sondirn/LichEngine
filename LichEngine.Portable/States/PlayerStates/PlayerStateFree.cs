@@ -157,9 +157,9 @@ namespace LichEngine.States
 
             //Apply Gravity
             _velocity.Y += Gravity * Time.DeltaTime;
-            if(_velocity.Y >= Gravity)
+            if(_velocity.Y >= Gravity * .75f)
             {
-                _velocity.Y = Gravity;
+                _velocity.Y = Gravity * .75f;
             }
             //reset y velocity if touching ground
             if (_player.CollisionState.Below && _velocity.Y >= 0)
@@ -170,8 +170,16 @@ namespace LichEngine.States
             //DebugConsole.Instance.Log(_velocity);
             //jump animations
             if(_velocity.Y < 0) { animation = "Jump"; loopMode = LoopMode.Once; }else if(_velocity.Y > 0) { animation = "Fall"; loopMode = LoopMode.Loop; }
-            
-
+            var res = new CollisionResult();
+            _player.Mover.CalculateMovement(ref _velocity, out res);
+            if (res.Collider != null)
+            {
+                if(res.Collider.Entity != null)
+                {
+                    //DebugConsole.Instance.Log(res.Collider.Entity.Name);
+                }
+            }
+            //Console.WriteLine(res.ToString());
             _player.Mover.Move(_velocity, _player.Collider, _player.CollisionState);
 
             if (animation != null && !_player.Animator.IsAnimationActive(animation))

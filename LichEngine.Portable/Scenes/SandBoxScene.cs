@@ -12,8 +12,10 @@ namespace LichEngine.GameCode.Scenes
     class SandBoxScene : Scene
     {
         public TmxMap TiledMap;
+        public bool testtest;
         public override void Initialize()
         {
+            testtest = false;
             base.Initialize();
             ClearColor = Color.DarkBlue;
             SetDesignResolution(640, 360, SceneResolutionPolicy.ShowAll);
@@ -34,25 +36,21 @@ namespace LichEngine.GameCode.Scenes
             var tex = Content.Load<Texture2D>(Nez.Content.Textures.DefaultTexture);
             test.AddComponent(new SpriteRenderer(tex));
             var collider = test.AddComponent<BoxCollider>();
-            collider.IsTrigger = true;
-            //var mover = test.AddComponent<Mover>();
-            //Physics.AddCollider(collider);
-            
-            //test.AddComponent(collider);
-            
-            
-            
+            Flags.SetFlagExclusive(ref collider.CollidesWithLayers, 0);
 
-            //var box = CreateEntity("box");
-            //box.Transform.Position = new Vector2(129, 129);
-            //box.AddComponent(new CircleCollider(32));
 
-            //AddRenderer(new DefaultRenderer(camera: player));
+            var test1 = CreateEntity("test", new Vector2(spawnObject.X + 100, spawnObject.Y));
+            var tex1 = Content.Load<Texture2D>(Nez.Content.Textures.DefaultTexture);
+            test1.AddComponent(new SpriteRenderer(tex1));
+            var collider1 = test1.AddComponent<BoxCollider>();
+            Flags.SetFlagExclusive(ref collider1.CollidesWithLayers, 0);
+
 
 
         }
         public override void Update()
         {
+            
             if (Keyboard.GetState().IsKeyDown(Keys.F1))
             {
                 Core.Scene = new SandBoxScene();

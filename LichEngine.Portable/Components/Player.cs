@@ -63,8 +63,6 @@ namespace LichEngine.GameCode.Components
             Collider.Width = 16;
             Collider.Height = 30;
             Collider.SetLocalOffset(new Vector2(0, 3));
-            Physics.AddCollider(Collider);
-            
             //Collider.IsTrigger = true;
             
             //Set up StateMachine
@@ -206,7 +204,8 @@ namespace LichEngine.GameCode.Components
 
         public void OnTriggerEnter(Collider other, Collider local)
         {
-            DebugConsole.Instance.Log("triggerEnter: {0}", other.Entity.Name);
+            //DebugConsole.Instance.Log("triggerEnter: {0}", other.Entity.Name);
+            Console.WriteLine("triggerEnter: {0}", other.Entity.Name);
             Animator.Color = Color.Red;
             
         }
