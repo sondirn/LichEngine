@@ -123,6 +123,10 @@
       <Project>{a25b5ff0-4aba-4b5c-bea5-5e5db9637cf6}</Project>
       <Name>LichEngine.Portable</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Nez.Persistence\Nez.Persistence.csproj">
+      <Project>{037a86c5-b1d5-47a9-ad8a-e26bd85123e7}</Project>
+      <Name>Nez.Persistence</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Nez.Portable\Nez.csproj">
       <Project>{d5bb73ca-07e7-4204-b175-a93a577dcc6a}</Project>
       <Name>Nez</Name>

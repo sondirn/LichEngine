@@ -3,6 +3,7 @@ using LichEngine.Portable.States;
 using LichEngine.Portable.States.PlayerStates;
 using Microsoft.Xna.Framework;
 using Nez;
+using Nez.Console;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,7 +66,7 @@ namespace LichEngine.States
             _maxSpeed = _player.MoveSpeed * _player.MoveSpeedModifier * Time.DeltaTime;
             var tempAcceleration = _acceleration * _player.MoveSpeed * Time.DeltaTime;
             var tempDeceleration = _deceleration * _player.MoveSpeed * Time.DeltaTime;
-            if(!_player.CollisionState.Below) { tempAcceleration /= 1.5f; }
+            if(!_player.CollisionState.Below) { tempAcceleration /= 1.5f; tempDeceleration /= 3; }
             string animation = null;
             var loopMode = LoopMode.Loop;
             var moveDir = new Vector2(_player.X_AxisInput.Value, 0);
@@ -166,7 +167,7 @@ namespace LichEngine.States
                 _velocity.Y = 0f;
                 _jumpGrace = 0;
             }
-            Console.WriteLine(_velocity);
+            //DebugConsole.Instance.Log(_velocity);
             //jump animations
             if(_velocity.Y < 0) { animation = "Jump"; loopMode = LoopMode.Once; }else if(_velocity.Y > 0) { animation = "Fall"; loopMode = LoopMode.Loop; }
             

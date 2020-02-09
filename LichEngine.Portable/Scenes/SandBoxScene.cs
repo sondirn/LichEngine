@@ -1,8 +1,10 @@
 ﻿using LichEngine.GameCode.Components;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Nez;
 using Nez.Console;
+using Nez.Sprites;
 using Nez.Tiled;
 
 namespace LichEngine.GameCode.Scenes
@@ -27,6 +29,17 @@ namespace LichEngine.GameCode.Scenes
             var playerComponent = new Player();
             player.AddComponent(playerComponent);
             System.Console.WriteLine(player.Id);
+
+            var test = CreateEntity("test", new Vector2(spawnObject.X, spawnObject.Y));
+            var tex = Content.Load<Texture2D>(Nez.Content.Textures.DefaultTexture);
+            test.AddComponent(new SpriteRenderer(tex));
+            var collider = test.AddComponent<BoxCollider>();
+            collider.IsTrigger = true;
+            //var mover = test.AddComponent<Mover>();
+            //Physics.AddCollider(collider);
+            
+            //test.AddComponent(collider);
+            
             
             
 
@@ -35,6 +48,7 @@ namespace LichEngine.GameCode.Scenes
             //box.AddComponent(new CircleCollider(32));
 
             //AddRenderer(new DefaultRenderer(camera: player));
+
 
         }
         public override void Update()

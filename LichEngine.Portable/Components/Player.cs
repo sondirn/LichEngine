@@ -10,6 +10,7 @@ using LichEngine.States;
 using LichEngine.Portable.States.PlayerStates;
 using Nez.Tiled;
 using LichEngine.GameCode.Scenes;
+using Nez.Console;
 
 namespace LichEngine.GameCode.Components
 {
@@ -20,6 +21,7 @@ namespace LichEngine.GameCode.Components
         public SubpixelVector2 _subpixelV2 = new SubpixelVector2();
         public TiledMapMover Mover;
         public TiledMapMover.CollisionState CollisionState = new TiledMapMover.CollisionState();
+        public CollisionResult CollisionResult;
         [Range(0, 10, .5f)]
         public float MoveSpeed = 1.5f;
         [NotInspectable]
@@ -61,6 +63,10 @@ namespace LichEngine.GameCode.Components
             Collider.Width = 16;
             Collider.Height = 30;
             Collider.SetLocalOffset(new Vector2(0, 3));
+            Physics.AddCollider(Collider);
+            
+            //Collider.IsTrigger = true;
+            
             //Set up StateMachine
             StateMachine = Entity.AddComponent(new StateMachine());
             StateMachine.AddState(STATES.PLAYER_FREE, new PlayerStateFree(this));
@@ -73,7 +79,9 @@ namespace LichEngine.GameCode.Components
             camera.MapLockEnabled = true;
             
             Entity.AddComponent(camera);
-            Entity.Scene.AddRenderer(new DefaultRenderer(camera: camera.Camera));
+            var renderer = new DefaultRenderer(camera: camera.Camera);
+            
+            Entity.Scene.AddRenderer(renderer);
             //camera.Camera.Position = Entity.Transform.Position;
             camera.MapSize = new Vector2(1280, 0);
             camera.FollowLerp = .3f;
@@ -193,12 +201,14 @@ namespace LichEngine.GameCode.Components
 
         public void Update()
         {
-            //_stateMachine
+            
         }
 
         public void OnTriggerEnter(Collider other, Collider local)
         {
-            Debug.Log("triggerEnter: {0}", other.Entity.Name);
+            DebugConsole.Instance.Log("triggerEnter: {0}", other.Entity.Name);
+            Animator.Color = Color.Red;
+            
         }
 
         public void OnTriggerExit(Collider other, Collider local)
