@@ -37,6 +37,11 @@ namespace Nez
 		public static bool PauseOnFocusLost = true;
 
 		/// <summary>
+		/// Graphics device manager
+		/// </summary>
+		public static GraphicsDeviceManager GraphicsDeviceManager;
+
+		/// <summary>
 		/// enables/disables debug rendering
 		/// </summary>
 		public static bool DebugRenderEnabled = false;
@@ -147,17 +152,17 @@ namespace Nez
 			_instance = this;
 			Emitter = new Emitter<CoreEvents>(new CoreEventsComparer());
 
-			var graphicsManager = new GraphicsDeviceManager(this)
+			GraphicsDeviceManager = new GraphicsDeviceManager(this)
 			{
 				PreferredBackBufferWidth = width,
 				PreferredBackBufferHeight = height,
 				IsFullScreen = isFullScreen,
 				SynchronizeWithVerticalRetrace = true
 			};
-			graphicsManager.DeviceReset += OnGraphicsDeviceReset;
-			graphicsManager.PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8;
+			GraphicsDeviceManager.DeviceReset += OnGraphicsDeviceReset;
+			GraphicsDeviceManager.PreferredDepthStencilFormat = DepthFormat.Depth24Stencil8;
 
-			Screen.Initialize(graphicsManager);
+			Screen.Initialize(GraphicsDeviceManager);
 			Window.ClientSizeChanged += OnGraphicsDeviceReset;
 			Window.OrientationChanged += OnOrientationChanged;
 
@@ -165,7 +170,7 @@ namespace Nez
 			Content = new NezGlobalContentManager(Services, base.Content.RootDirectory);
 			IsMouseVisible = true;
 			IsFixedTimeStep = false;
-
+				
 			entitySystemsEnabled = enableEntitySystems;
 
 			// setup systems

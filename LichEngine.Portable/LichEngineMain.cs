@@ -42,7 +42,16 @@ namespace LichEngine.Portable
         static void FullScreen()
         {
             Screen.SetSize(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
-            Instance.Window.IsBorderless = !Instance.Window.IsBorderless;
+            Screen.IsFullscreen = true;
+            //Instance.Window.IsBorderless = !Instance.Window.IsBorderless;
+        }
+
+        [Command("resolution", "changes resolution of window, default is 1280x720. Resolution is based off of height in a 16:9 aspect ratio")]
+        static void ChangeResolution(int height = 720)
+        {
+            var minHeight = height / 9;
+            var trueWidth = minHeight * 16;
+            Screen.SetSize(trueWidth, height);
         }
     }
 
