@@ -1,6 +1,8 @@
 ﻿using LichEngine.GameCode.Components;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Nez;
+using Nez.Console;
 using Nez.Tiled;
 
 namespace LichEngine.GameCode.Scenes
@@ -11,7 +13,7 @@ namespace LichEngine.GameCode.Scenes
         public override void Initialize()
         {
             base.Initialize();
-            ClearColor = Color.CornflowerBlue;
+            ClearColor = Color.DarkBlue;
             SetDesignResolution(640, 360, SceneResolutionPolicy.ShowAll);
             
 
@@ -34,6 +36,14 @@ namespace LichEngine.GameCode.Scenes
 
             //AddRenderer(new DefaultRenderer(camera: player));
 
+        }
+        public override void Update()
+        {
+            if (Keyboard.GetState().IsKeyDown(Keys.F1))
+            {
+                Core.Scene = new SandBoxScene();
+            }
+            base.Update();
         }
 
         

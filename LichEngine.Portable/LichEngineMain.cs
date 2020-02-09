@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Nez;
+using Nez.Console;
 using Nez.Tiled;
 using System.IO;
 
@@ -30,6 +31,19 @@ namespace LichEngine.Portable
             //Window.IsBorderless = true;
         }
 
+
+        [Command("debugrender", "Toggles rendering of Debug elements")]
+        static void DebugRender()
+        {
+            DebugRenderEnabled = !DebugRenderEnabled;
+        }
+
+        [Command("fullscreen", "Toggles fullscreen of game window")]
+        static void FullScreen()
+        {
+            Screen.SetSize(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
+            Instance.Window.IsBorderless = !Instance.Window.IsBorderless;
+        }
     }
 
     

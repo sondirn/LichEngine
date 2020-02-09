@@ -14,21 +14,22 @@ namespace LichEngine.States
 {
     public class PlayerStateFree : KindredState
     {
-        private Player _player;
+        private readonly Player _player;
         public bool Sheathed = false;
-        public float Gravity = 13f;
+        public float Gravity = 10f;
         private float _sheathedTimer;
         private float _attackComboResetTimer;
         private float _jumpGrace;
-        private float _acceleration = 1000f;
-        private float _deceleration = 1000f;
+        private readonly float _acceleration = 1000f;
+        private readonly float _deceleration = 900f;
         private float _maxSpeed = 100;
-        private float _jumpVelocity = 2.3f;
-        private float _fallMult = 1.3f;
-        private float _lowJumpMult = 1.7f;
+        private readonly float _jumpVelocity = 2.2f;
+        private readonly float _fallMult = 1.3f;
+        private readonly float _lowJumpMult = 1.7f;
         private float _landFallQueue = 0f;
-        private float _landFallQueueEnd = .17f;
+        private readonly float _landFallQueueEnd = .3f;
         private bool _jumpQueued = false;
+        private bool _attackQueued = false;
         public Vector2 _velocity;
         Vector2 _movement;
         public PlayerStateFree(Player player)
@@ -64,7 +65,7 @@ namespace LichEngine.States
             _maxSpeed = _player.MoveSpeed * _player.MoveSpeedModifier * Time.DeltaTime;
             var tempAcceleration = _acceleration * _player.MoveSpeed * Time.DeltaTime;
             var tempDeceleration = _deceleration * _player.MoveSpeed * Time.DeltaTime;
-            if(!_player.CollisionState.Below) { tempAcceleration /= 2f; }
+            if(!_player.CollisionState.Below) { tempAcceleration /= 1.5f; }
             string animation = null;
             var loopMode = LoopMode.Loop;
             var moveDir = new Vector2(_player.X_AxisInput.Value, 0);
@@ -114,9 +115,13 @@ namespace LichEngine.States
                 
                 //Queue jump while falling
                 if (_player.JumpInput.IsPressed) { _landFallQueue = 0f; _jumpQueued = true; }
+                if(_player.AttackInput.IsPressed) { _landFallQueue = 0f; _attackQueued = true; }
                 _landFallQueue += Time.DeltaTime;
                 if (_landFallQueue >= _landFallQueueEnd)
+                {
                     _jumpQueued = false;
+                    _attackQueued = false;
+                }
             }
             //jump
             if (_jumpGrace < .1f && _player.JumpInput.IsPressed)
@@ -130,6 +135,12 @@ namespace LichEngine.States
                 _velocity.Y = -Mathf.Sqrt(_jumpVelocity * Gravity);
                 _jumpQueued = false;
                 _jumpGrace = 1f;
+            }
+            //attack if queued
+            if(_player.CollisionState.BecameGroundedThisFrame && _attackQueued && _landFallQueue < _landFallQueueEnd)
+            {
+                _attackQueued = false;
+                _player.StateMachine.SetState(STATES.PLAYER_ATTACK);
             }
             //better jumping
             if(_velocity.Y > 0)
@@ -145,12 +156,17 @@ namespace LichEngine.States
 
             //Apply Gravity
             _velocity.Y += Gravity * Time.DeltaTime;
+            if(_velocity.Y >= Gravity)
+            {
+                _velocity.Y = Gravity;
+            }
             //reset y velocity if touching ground
             if (_player.CollisionState.Below && _velocity.Y >= 0)
             {
                 _velocity.Y = 0f;
                 _jumpGrace = 0;
             }
+            Console.WriteLine(_velocity);
             //jump animations
             if(_velocity.Y < 0) { animation = "Jump"; loopMode = LoopMode.Once; }else if(_velocity.Y > 0) { animation = "Fall"; loopMode = LoopMode.Loop; }
             

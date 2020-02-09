@@ -56,6 +56,7 @@ namespace Nez
 			_targetEntity = targetEntity;
 			_cameraStyle = cameraStyle;
 			Camera = camera;
+			
 		}
 
 		public FollowCamera(Entity targetEntity, CameraStyle cameraStyle = CameraStyle.LockOn) : this(targetEntity,
@@ -73,9 +74,9 @@ namespace Nez
 				Camera = Entity.Scene.Camera;
 
 			Follow(_targetEntity, _cameraStyle);
-
 			// listen for changes in screen size so we can keep our deadzone properly positioned
 			Core.Emitter.AddObserver(CoreEvents.GraphicsDeviceReset, OnGraphicsDeviceReset);
+			Camera.Position = _targetEntity.Transform.Position;
 		}
 
 		public override void OnRemovedFromEntity()

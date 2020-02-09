@@ -61,19 +61,21 @@ namespace LichEngine.GameCode.Components
             Collider.Width = 16;
             Collider.Height = 30;
             Collider.SetLocalOffset(new Vector2(0, 3));
-            
             //Set up StateMachine
             StateMachine = Entity.AddComponent(new StateMachine());
             StateMachine.AddState(STATES.PLAYER_FREE, new PlayerStateFree(this));
             StateMachine.AddState(STATES.PLAYER_ATTACK, new PlayerStateAttack(this));
             StateMachine.CurrentState = STATES.PLAYER_FREE;
+            
 
             //Set up Camera
             var camera = new FollowCamera(Entity);
             camera.MapLockEnabled = true;
+            
             Entity.AddComponent(camera);
             Entity.Scene.AddRenderer(new DefaultRenderer(camera: camera.Camera));
-            camera.MapSize = new Vector2(1000, 0);
+            //camera.Camera.Position = Entity.Transform.Position;
+            camera.MapSize = new Vector2(1280, 0);
             camera.FollowLerp = .3f;
             #endregion
 
@@ -120,7 +122,7 @@ namespace LichEngine.GameCode.Components
                 attackSprite[4],
                 attackSprite[5],
             });
-            Animator.AddAnimation("Attack1", 10, new[]
+            Animator.AddAnimation("Attack1", 12, new[]
             {
                 attackSprite[6],
                 attackSprite[7],
@@ -128,7 +130,7 @@ namespace LichEngine.GameCode.Components
                 attackSprite[9],
                 attackSprite[10]
             });
-            Animator.AddAnimation("Attack2", 8, new[]
+            Animator.AddAnimation("Attack2", 12, new[]
             {
                 attackSprite[11],
                 attackSprite[12],
@@ -163,6 +165,8 @@ namespace LichEngine.GameCode.Components
             X_AxisInput.Nodes.Add(new VirtualAxis.GamePadLeftStickX());
             X_AxisInput.Nodes.Add(new VirtualAxis.KeyboardKeys(VirtualInput.OverlapBehavior.TakeNewer, Keys.A, Keys.D));
             X_AxisInput.Nodes.Add(new VirtualAxis.KeyboardKeys(VirtualInput.OverlapBehavior.TakeNewer, Keys.Left, Keys.Right));
+            X_AxisInput.Nodes.Add(new VirtualAxis.GamePadLeftStickX());
+            X_AxisInput.Nodes.Add(new VirtualAxis.GamePadDpadLeftRight());
 
             // vertical input from dpad, left stick or keyboard up/down
             Y_AxisInput = new VirtualIntegerAxis();
@@ -170,15 +174,19 @@ namespace LichEngine.GameCode.Components
             Y_AxisInput.Nodes.Add(new VirtualAxis.GamePadLeftStickY());
             Y_AxisInput.Nodes.Add(new VirtualAxis.KeyboardKeys(VirtualInput.OverlapBehavior.TakeNewer, Keys.W, Keys.S));
             Y_AxisInput.Nodes.Add(new VirtualAxis.KeyboardKeys(VirtualInput.OverlapBehavior.TakeNewer, Keys.Up, Keys.Down));
+            Y_AxisInput.Nodes.Add(new VirtualAxis.GamePadLeftStickY());
+            Y_AxisInput.Nodes.Add(new VirtualAxis.GamePadDpadUpDown());
 
             //Attack input
             AttackInput = new VirtualButton();
             AttackInput.Nodes.Add(new VirtualButton.MouseLeftButton());
             AttackInput.Nodes.Add(new VirtualButton.KeyboardKey(Keys.M));
+            AttackInput.Nodes.Add(new VirtualButton.GamePadButton(0, Buttons.X));
 
             //Jump INput
             JumpInput = new VirtualButton();
             JumpInput.Nodes.Add(new VirtualButton.KeyboardKey(Keys.Space));
+            JumpInput.Nodes.Add(new VirtualButton.GamePadButton(0, Buttons.A));
         }
 
         
