@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="Components\Player.cs" />
     <Compile Include="Components\StaticObject.cs" />
+    <Compile Include="Components\TypeComponent.cs" />
     <Compile Include="LichEngineMain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scenes\SandBoxScene.cs" />

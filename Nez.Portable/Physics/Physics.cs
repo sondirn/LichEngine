@@ -20,6 +20,11 @@ namespace Nez
 		public static Vector2 Gravity = new Vector2(0, 300f);
 
 		/// <summary>
+		/// Convenient field for storing an enabled value globally
+		/// </summary>
+		public static bool Enabled = true;
+
+		/// <summary>
 		/// cell size used when reset is called and a new SpatialHash is created
 		/// </summary>
 		public static int SpatialHashCellSize = 100;

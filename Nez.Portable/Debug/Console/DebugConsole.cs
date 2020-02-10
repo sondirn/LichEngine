@@ -169,6 +169,7 @@ namespace Nez.Console
 
 		void UpdateClosed()
 		{
+			Nez.Physics.Enabled = true;
 			if (!_canOpen)
 			{
 				_canOpen = true;
@@ -186,6 +187,7 @@ namespace Nez.Console
 
 		void UpdateOpen()
 		{
+			Nez.Physics.Enabled = false;
 			_underscoreCounter += Time.DeltaTime;
 			while (_underscoreCounter >= UNDERSCORE_TIME)
 			{

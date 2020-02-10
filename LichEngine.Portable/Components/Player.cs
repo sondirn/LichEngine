@@ -11,6 +11,7 @@ using LichEngine.Portable.States.PlayerStates;
 using Nez.Tiled;
 using LichEngine.GameCode.Scenes;
 using Nez.Console;
+using LichEngine.Portable.Components;
 
 namespace LichEngine.GameCode.Components
 {
@@ -33,6 +34,8 @@ namespace LichEngine.GameCode.Components
         public FollowCamera Camera;
         public BoxCollider Collider;
         public StateMachine StateMachine;
+        public CollisionListener CollisionListener;
+        public TypeComponent Type;
         #endregion
 
         public override void OnAddedToEntity()
@@ -63,8 +66,16 @@ namespace LichEngine.GameCode.Components
             Collider.Width = 16;
             Collider.Height = 30;
             Collider.SetLocalOffset(new Vector2(0, 3));
-            //Collider.IsTrigger = true;
-            
+            Flags.SetFlagExclusive(ref Collider.CollidesWithLayers, 1);
+            Flags.SetFlagExclusive(ref Collider.PhysicsLayer, 1);
+
+            //CollisionListener
+            CollisionListener = Entity.AddComponent<CollisionListener>();
+
+            //SetType
+            Type = Entity.AddComponent<TypeComponent>();
+            Type.SetType(EntityType.PLAYER);
+
             //Set up StateMachine
             StateMachine = Entity.AddComponent(new StateMachine());
             StateMachine.AddState(STATES.PLAYER_FREE, new PlayerStateFree(this));
@@ -205,7 +216,8 @@ namespace LichEngine.GameCode.Components
         public void OnTriggerEnter(Collider other, Collider local)
         {
             //DebugConsole.Instance.Log("triggerEnter: {0}", other.Entity.Name);
-            Console.WriteLine("triggerEnter: {0}", other.Entity.Name);
+            var type = other.Entity.GetComponent<TypeComponent>();
+            Debug.Log("Colliding with: {0}", type.EntityType);
             Animator.Color = Color.Red;
             
         }
@@ -213,6 +225,7 @@ namespace LichEngine.GameCode.Components
         public void OnTriggerExit(Collider other, Collider local)
         {
             Debug.Log("triggerExit: {0}", other.Entity.Name);
+            Animator.Color = Color.White;
         }
     }
 }

@@ -424,7 +424,10 @@ namespace Nez
 				EntityProcessors.Update();
 
 			// update our Entities
-			Entities.Update();
+			if (Physics.Enabled)
+			{
+				Entities.Update();
+			}
 
 			if (EntityProcessors != null)
 				EntityProcessors.LateUpdate();

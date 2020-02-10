@@ -69,7 +69,7 @@ namespace Nez.Console
 				}
 
 				Instance._runtimeInspector = new RuntimeInspector(entity);
-				Instance.IsOpen = false;
+				//Instance.IsOpen = false;
 			}
 		}
 
@@ -91,7 +91,7 @@ namespace Nez.Console
 					return;
 				}
 				Instance._runtimeInspector = new RuntimeInspector(entity);
-				Instance.IsOpen = false;
+				//Instance.IsOpen = false;
 			}
 		}
 

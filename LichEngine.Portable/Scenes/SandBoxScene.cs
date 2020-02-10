@@ -1,4 +1,5 @@
 ﻿using LichEngine.GameCode.Components;
+using LichEngine.Portable.Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -33,17 +34,7 @@ namespace LichEngine.GameCode.Scenes
             System.Console.WriteLine(player.Id);
 
             var test = CreateEntity("test", new Vector2(spawnObject.X, spawnObject.Y));
-            var tex = Content.Load<Texture2D>(Nez.Content.Textures.DefaultTexture);
-            test.AddComponent(new SpriteRenderer(tex));
-            var collider = test.AddComponent<BoxCollider>();
-            Flags.SetFlagExclusive(ref collider.CollidesWithLayers, 0);
-
-
-            var test1 = CreateEntity("test", new Vector2(spawnObject.X + 100, spawnObject.Y));
-            var tex1 = Content.Load<Texture2D>(Nez.Content.Textures.DefaultTexture);
-            test1.AddComponent(new SpriteRenderer(tex1));
-            var collider1 = test1.AddComponent<BoxCollider>();
-            Flags.SetFlagExclusive(ref collider1.CollidesWithLayers, 0);
+            test.AddComponent(new StaticObject());
 
 
 
