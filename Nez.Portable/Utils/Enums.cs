@@ -34,4 +34,15 @@ namespace Nez
 		Left,
 		Right
 	}
+
+	public enum EntityType
+	{
+		STATIC_OBJECT,
+		STATIC_BREAKABLE,
+		ENEMY,
+		PROJECTILE,
+		RAYCAST,
+		SWING_COLLIDER,
+		PLAYER
+	}
 }

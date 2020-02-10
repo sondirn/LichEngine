@@ -1,11 +1,6 @@
 ﻿using LichEngine.GameCode.Components;
 using LichEngine.States;
 using Nez;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static Nez.Sprites.SpriteAnimator;
 
 namespace LichEngine.Portable.States.PlayerStates
@@ -28,7 +23,6 @@ namespace LichEngine.Portable.States.PlayerStates
 
         private void Animator_OnAnimationCompletedEvent(string obj)
         {
-            
             attackNum++;
             if (_attackQueueTimer < _attackQueueEnd && _attackQueued)
             {
@@ -36,15 +30,12 @@ namespace LichEngine.Portable.States.PlayerStates
                 return;
             }
             _stateMachine.SetState(STATES.PLAYER_FREE);
-             
-            
         }
 
         public override void StateEnter()
         {
             _player.Animator.OnAnimationCompletedEvent += Animator_OnAnimationCompletedEvent;
             _attackQueued = false;
-            
 
             base.StateEnter();
         }
@@ -73,13 +64,11 @@ namespace LichEngine.Portable.States.PlayerStates
 
         public override void StateExit()
         {
-            
-            var sheathe = _player.StateMachine.States[STATES.PLAYER_FREE] as PlayerStateFree;
+            var sheathe = _player.StateMachine.States[STATES.PLAYER_FREE] as PlayerPlatformerStateFree;
             sheathe.SetUnSheathe();
             //sheathe._velocity.X = 0;
             _player.Animator.OnAnimationCompletedEvent -= Animator_OnAnimationCompletedEvent;
             base.StateExit();
         }
-
     }
 }

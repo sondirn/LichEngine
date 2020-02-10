@@ -1,20 +1,13 @@
-﻿using Nez;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LichEngine.Portable.States
+﻿namespace LichEngine.Portable.States
 {
     public class KindredState
     {
         public bool Entered = false;
         public bool Exiting = false;
-        
+
         public virtual void StateEnter()
         { Entered = true; }
-        
+
         public virtual void Update()
         {
         }
@@ -35,12 +28,10 @@ namespace LichEngine.Portable.States
             }
             Update();
             LateUpdate();
-            
         }
 
         public void ChangeState(string name)
         {
-
         }
     }
 }

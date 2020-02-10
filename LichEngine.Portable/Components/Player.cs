@@ -1,32 +1,34 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using Nez;
-using Nez.Textures;
-using Nez.Sprites;
-using System;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework;
-using LichEngine.Portable.States;
-using LichEngine.States;
-using LichEngine.Portable.States.PlayerStates;
-using Nez.Tiled;
-using LichEngine.GameCode.Scenes;
-using Nez.Console;
+﻿using LichEngine.GameCode.Scenes;
 using LichEngine.Portable.Components;
+using LichEngine.Portable.States;
+using LichEngine.Portable.States.PlayerStates;
+using LichEngine.States;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Nez;
+using Nez.Sprites;
+using Nez.Textures;
+using Nez.Tiled;
 
 namespace LichEngine.GameCode.Components
 {
     public class Player : Component, ITriggerListener, IUpdatable
     {
         #region Fields
+
         public SpriteAnimator Animator;
         public SubpixelVector2 _subpixelV2 = new SubpixelVector2();
         public TiledMapMover Mover;
         public TiledMapMover.CollisionState CollisionState = new TiledMapMover.CollisionState();
         public CollisionResult CollisionResult;
+
         [Range(0, 10, .5f)]
         public float MoveSpeed = 1.5f;
+
         [NotInspectable]
         public float MoveSpeedModifier = 100;
+
         public VirtualIntegerAxis X_AxisInput;
         public VirtualIntegerAxis Y_AxisInput;
         public VirtualButton AttackInput;
@@ -36,25 +38,29 @@ namespace LichEngine.GameCode.Components
         public StateMachine StateMachine;
         public CollisionListener CollisionListener;
         public TypeComponent Type;
-        #endregion
+
+        #endregion Fields
 
         public override void OnAddedToEntity()
         {
             #region Load up texture atlas...
+
             //Load up character texture atlas
-            var idleTexture     = Entity.Scene.Content.Load<Texture2D>(Content.Textures.HeroIdle);
-            var runTexture      = Entity.Scene.Content.Load<Texture2D>(Content.Textures.HeroRun);
-            var attackTexture   = Entity.Scene.Content.Load<Texture2D>(Content.Textures.HeroAttack);
-            var jumpTexture     = Entity.Scene.Content.Load<Texture2D>(Content.Textures.HeroJump);
-            var fallTexture     = Entity.Scene.Content.Load<Texture2D>(Content.Textures.HeroFall);
-            var idleSprite      = Sprite.SpritesFromAtlas(idleTexture, 50, 37);
-            var runSprite       = Sprite.SpritesFromAtlas(runTexture, 50, 37);
-            var attackSprite    = Sprite.SpritesFromAtlas(attackTexture, 50, 37);
-            var jumpSprite      = Sprite.SpritesFromAtlas(jumpTexture, 50, 37);
-            var fallSprite      = Sprite.SpritesFromAtlas(fallTexture, 50, 37);
-            #endregion
+            var idleTexture = Entity.Scene.Content.Load<Texture2D>(Content.Textures.HeroIdle);
+            var runTexture = Entity.Scene.Content.Load<Texture2D>(Content.Textures.HeroRun);
+            var attackTexture = Entity.Scene.Content.Load<Texture2D>(Content.Textures.HeroAttack);
+            var jumpTexture = Entity.Scene.Content.Load<Texture2D>(Content.Textures.HeroJump);
+            var fallTexture = Entity.Scene.Content.Load<Texture2D>(Content.Textures.HeroFall);
+            var idleSprite = Sprite.SpritesFromAtlas(idleTexture, 50, 37);
+            var runSprite = Sprite.SpritesFromAtlas(runTexture, 50, 37);
+            var attackSprite = Sprite.SpritesFromAtlas(attackTexture, 50, 37);
+            var jumpSprite = Sprite.SpritesFromAtlas(jumpTexture, 50, 37);
+            var fallSprite = Sprite.SpritesFromAtlas(fallTexture, 50, 37);
+
+            #endregion Load up texture atlas...
 
             #region add componentents...
+
             //Movement component
             var map = Entity.Scene as SandBoxScene;
             Mover = Entity.AddComponent(new TiledMapMover(map.TiledMap.GetLayer<TmxLayer>("main")));
@@ -78,32 +84,32 @@ namespace LichEngine.GameCode.Components
 
             //Set up StateMachine
             StateMachine = Entity.AddComponent(new StateMachine());
-            StateMachine.AddState(STATES.PLAYER_FREE, new PlayerStateFree(this));
+            StateMachine.AddState(STATES.PLAYER_FREE, new PlayerPlatformerStateFree(this));
             StateMachine.AddState(STATES.PLAYER_ATTACK, new PlayerStateAttack(this));
             StateMachine.CurrentState = STATES.PLAYER_FREE;
-            
 
             //Set up Camera
             var camera = new FollowCamera(Entity);
             camera.MapLockEnabled = true;
-            
+
             Entity.AddComponent(camera);
             var renderer = new DefaultRenderer(camera: camera.Camera);
-            
+
             Entity.Scene.AddRenderer(renderer);
             //camera.Camera.Position = Entity.Transform.Position;
             camera.MapSize = new Vector2(1280, 0);
             camera.FollowLerp = .3f;
-            #endregion
+
+            #endregion add componentents...
 
             #region Animations...
+
             Animator.AddAnimation("IdleSheathed", 3.5f, new[]
             {
                 idleSprite[0],
                 idleSprite[1],
                 idleSprite[2],
                 idleSprite[3]
-                
             });
             Animator.AddAnimation("IdleUnSheathed", 3.5f, new[]
             {
@@ -167,11 +173,12 @@ namespace LichEngine.GameCode.Components
                 fallSprite[0],
                 fallSprite[1]
             });
-            #endregion
+
+            #endregion Animations...
+
             //Set up Input
             SetupInput();
-            base.OnAddedToEntity(); 
-            
+            base.OnAddedToEntity();
         }
 
         private void SetupInput()
@@ -206,11 +213,8 @@ namespace LichEngine.GameCode.Components
             JumpInput.Nodes.Add(new VirtualButton.GamePadButton(0, Buttons.A));
         }
 
-        
-
         public void Update()
         {
-            
         }
 
         public void OnTriggerEnter(Collider other, Collider local)
@@ -218,8 +222,7 @@ namespace LichEngine.GameCode.Components
             //DebugConsole.Instance.Log("triggerEnter: {0}", other.Entity.Name);
             var type = other.Entity.GetComponent<TypeComponent>();
             Debug.Log("Colliding with: {0}", type.EntityType);
-            Animator.Color = Color.Red;
-            
+            //Animator.Color = Color.Red;
         }
 
         public void OnTriggerExit(Collider other, Collider local)
@@ -229,4 +232,3 @@ namespace LichEngine.GameCode.Components
         }
     }
 }
-
